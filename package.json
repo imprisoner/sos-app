@@ -1,0 +1,83 @@
+{
+  "name": "sos-feathers",
+  "description": "sos app",
+  "version": "0.0.0",
+  "homepage": "",
+  "private": true,
+  "keywords": [
+    "feathers"
+  ],
+  "author": {},
+  "contributors": [],
+  "bugs": {},
+  "engines": {
+    "node": ">= 18.16.1"
+  },
+  "feathers": {
+    "language": "js",
+    "packager": "npm",
+    "database": "postgresql",
+    "framework": "koa",
+    "transports": [
+      "rest",
+      "websockets"
+    ],
+    "schema": "typebox"
+  },
+  "directories": {
+    "lib": "src",
+    "test": "test"
+  },
+  "main": "lib/index",
+  "type": "module",
+  "scripts": {
+    "start": "npm run bootstrap && npm run migrate && node src",
+    "dev": "nodemon src/",
+    "prettier": "npx prettier \"**/*.js\" --write",
+    "mocha": "cross-env NODE_ENV=test mocha test/ --recursive --exit",
+    "test": "cross-env NODE_ENV=test npm run migrate && npm run mocha",
+    "bundle:client": "npm pack --pack-destination ./public",
+    "migrate": "knex migrate:latest",
+    "migrate:make": "knex migrate:make",
+    "bootstrap": "node bootstrap.js"
+  },
+  "dependencies": {
+    "@feathersjs/adapter-commons": "^5.0.6",
+    "@feathersjs/authentication": "^5.0.6",
+    "@feathersjs/authentication-client": "^5.0.6",
+    "@feathersjs/authentication-local": "^5.0.6",
+    "@feathersjs/authentication-oauth": "^5.0.6",
+    "@feathersjs/configuration": "^5.0.6",
+    "@feathersjs/errors": "^5.0.6",
+    "@feathersjs/feathers": "^5.0.6",
+    "@feathersjs/knex": "^5.0.6",
+    "@feathersjs/koa": "^5.0.6",
+    "@feathersjs/schema": "^5.0.6",
+    "@feathersjs/socketio": "^5.0.6",
+    "@feathersjs/transport-commons": "^5.0.6",
+    "@feathersjs/typebox": "^5.0.6",
+    "@koa/router": "^12.0.0",
+    "@mairu/swagger-ui-apikey-auth-form": "^1.2.1",
+    "dotenv": "^16.3.1",
+    "feathers-swagger": "^3.0.0",
+    "knex": "^2.5.1",
+    "koa-mount": "^4.0.0",
+    "koa-send": "^5.0.1",
+    "koa-static": "^5.0.0",
+    "nodemailer": "^6.9.3",
+    "pg": "^8.11.0",
+    "shortid": "^2.2.16",
+    "swagger-ui-dist": "^5.1.1",
+    "uuid": "^9.0.0",
+    "winston": "^3.10.0"
+  },
+  "devDependencies": {
+    "@feathersjs/cli": "^5.0.6",
+    "@feathersjs/rest-client": "^5.0.6",
+    "axios": "^1.4.0",
+    "cross-env": "^7.0.3",
+    "mocha": "^10.2.0",
+    "nodemon": "^3.0.1",
+    "prettier": "^3.0.0"
+  }
+}

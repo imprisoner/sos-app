@@ -1,0 +1,53 @@
+version: "3.8"
+volumes:
+  postgres:
+services:
+  postgres:
+    image: postgres:15
+    container_name: sos_database
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 5s
+      retries: 1
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_PASSWORD=$DB_PASS
+      - POSTGRES_DB=$DB_NAME
+      - PGUSER=$DB_USER
+      - PGDATA=/var/lib/postgresql/data
+    ports:
+      - $PGSQL_LOCAL_PORT:$DB_PORT
+    volumes:
+      - postgres:/var/lib/postgresql/data
+  app:
+    depends_on:
+      - postgres
+
+    container_name: sos_api
+    image: sos-server:18
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - .:/usr/src/app
+    expose:
+      - $APP_PORT
+    ports:
+      - $NODE_LOCAL_PORT:$APP_PORT
+    environment:
+      - DB_HOST=$DB_HOST
+      - DB_USER=$DB_USER
+      - DB_PASSWORD=$DB_PASS
+      - DB_NAME=$DB_NAME
+      - DB_PORT=$DB_PORT
+      - NODE_ENV=$NODE_ENV
+    stdin_open: true
+    tty: true
+    command: npm run start
+    # command: tail -F anything
