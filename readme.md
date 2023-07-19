@@ -1,4 +1,4 @@
-# sos-feathers
+# sos-app
 
 > sos app
 
@@ -12,15 +12,16 @@ This project uses [Feathers](http://feathersjs.com). An open source framework fo
 2. Install your dependencies
 
     ```
-    cd path/to/sos-feathers
+    cd path/to/sos-app
     npm install
     ```
 
 3. Start your app
 
     ```
+    npm run bootstrap # Run creating database if none
     npm run migrate # Run migrations to set up the database
-    npm start
+    npm start # Run two previous scripts and start app
     ```
 
 ## Testing
@@ -39,3 +40,7 @@ $ npx feathers generate service               # Generate a new Service
 ## Help
 
 For more information on all the things you can do with Feathers visit [docs.feathersjs.com](http://docs.feathersjs.com).
+
+## Swagger-UI
+
+Swagger is available at ```/docs``` path
