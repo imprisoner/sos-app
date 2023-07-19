@@ -10,8 +10,10 @@ export const checkEmailPresence = async (context, next) => {
   }))
   context.hasEmail = user.total > 0
   
-  if (context.hasEmail) {
-    context.data.userId = user.data[0].id
+  const isSignupRoute = context.path === 'users' && context.method === 'create'
+  
+  if (context.hasEmail && !isSignupRoute) {
+    context.data.id = user.data[0].id
   }
   return context
 }

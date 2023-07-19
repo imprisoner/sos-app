@@ -12,7 +12,7 @@ import { authentication } from './authentication.js'
 
 import { services } from './services/index.js'
 import { channels } from './channels.js'
-
+import { mailer } from './mailer.js'
 import openapi from './openapi.js';
 
 const app = koa(feathers())
@@ -26,6 +26,7 @@ app.use(bodyParser())
 // Configure services and transports
 app.configure(openapi)
 app.configure(rest())
+app.configure(mailer)
 
 app.configure(
   socketio({
