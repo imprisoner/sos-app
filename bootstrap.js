@@ -1,6 +1,12 @@
 import Knex from 'knex'
 import dotenv from 'dotenv'
-dotenv.config()
+import path from "node:path"
+const filename = process.env.NODE_ENV === 'production' ? '.env' : '.env.development'
+dotenv.config(
+  {
+    path: path.resolve(process.cwd(), filename)
+  }
+)
 
 const databaseName = process.env.DB_NAME
 
