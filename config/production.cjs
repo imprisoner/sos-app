@@ -1,7 +1,5 @@
-if (process.env.NODE_ENV === 'development') {
-  require('dotenv').config(
-    {path: path.resolve(process.cwd(), '.env.development')}
-  )
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config({path: path.resolve(process.cwd(), '.env.development')})
 }
 
 module.exports = {

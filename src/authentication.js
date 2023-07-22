@@ -73,7 +73,7 @@ export const authentication = (app) => {
     before: {
       // resolve local strategy by default
       create: [schemaHooks.resolveData(resolve({
-        strategy: async () => 'local'
+        strategy: async (value) => value || 'local'
       }))]
     }
   })

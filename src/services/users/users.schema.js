@@ -29,7 +29,7 @@ export const userSchema = Type.Object(
       }
     ),
 
-    role: StringEnum(enums.userPreferredLang),
+    role: StringEnum(enums.userRole),
 
     preferredLang: StringEnum(enums.userPreferredLang),
 

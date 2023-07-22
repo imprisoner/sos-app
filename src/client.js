@@ -1,6 +1,10 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/client.html
 import { feathers } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
+import { messagesClient } from './services/messages/messages.shared.js'
+
+import { roomsClient } from './services/rooms/rooms.shared.js'
+
 import { sosClient } from './services/sos/sos.shared.js'
 
 import { messageClient } from './services/messages/messages.shared'
@@ -25,6 +29,10 @@ export const createClient = (connection, authenticationOptions = {}) => {
   client.configure(userClient)
   client.configure(messageClient)
   client.configure(sosClient)
+
+  client.configure(roomsClient)
+
+  client.configure(messagesClient)
 
   return client
 }
