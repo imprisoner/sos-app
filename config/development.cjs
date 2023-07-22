@@ -1,12 +1,10 @@
-const path = require('path')
-
-require('dotenv').config({
-  path: path.resolve(process.cwd(), '.env.development')
-})
+if (process.env.NODE_ENV === 'development') {
+  require('dotenv').config()
+}
 
 module.exports = {
-  host: 'localhost',
-  port: 3030,
+  host: process.env.APP_HOST,
+  port: Number(process.env.APP_PORT),
   public: './public/',
   origins: [
     '*'
@@ -19,16 +17,16 @@ module.exports = {
     client: 'pg',
     connection: {
       host: process.env.DB_HOST,
-      port: 5432,
-      user: 'postgres',
-      password: '1111',
-      database: 'sos-app'
+      port: Number(process.env.DB_PORT),
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME
     }
   },
   authentication: {
     entity: 'user',
     service: 'users',
-    secret: 'LtZF+LHH+vhPSFKeDMOd9yNEAI23beh0',
+    secret: process.env.JWT_SECRET,
     authStrategies: [
       'jwt',
       'local'
@@ -47,12 +45,12 @@ module.exports = {
     }
   },
   mailer: {
-    host: 'smtp.yandex.ru',
-    port: 465,
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT),
     secure: true,
     auth: {
-      user: 'continentalresident@yandex.ru',
-      pass: 'ilqojdzfpijxqcij'
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS
     }
   }
 }

@@ -11,13 +11,13 @@ services:
       interval: 1s
       timeout: 5s
       retries: 1
-    env_file:
-      - .env
     environment:
       - POSTGRES_PASSWORD=$DB_PASS
       - POSTGRES_DB=$DB_NAME
+      - POSTGRES_USER=$DB_USER
       - PGUSER=$DB_USER
       - PGDATA=/var/lib/postgresql/data
+      - POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256
     ports:
       - $PGSQL_LOCAL_PORT:$DB_PORT
     volumes:
@@ -32,10 +32,8 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
-    env_file:
-      - .env
-    volumes:
-      - .:/usr/src/app
+    # volumes:
+    #   - .:/usr/src/app
     expose:
       - $APP_PORT
     ports:
@@ -50,4 +48,4 @@ services:
     stdin_open: true
     tty: true
     command: npm run start
-    # command: tail -F anything
+    # command: tail -f /dev/null
