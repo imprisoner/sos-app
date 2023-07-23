@@ -15,6 +15,7 @@ import { RoomsService, getOptions } from './rooms.class.js'
 import { roomsPath, roomsMethods } from './rooms.shared.js'
 import { setupId } from '../../hooks/users/setup-id.js'
 import { setupRoomData } from '../../hooks/messages/setup-room-data.js'
+import { setupTimeout } from '../../hooks/rooms/setup-timeout.js'
 
 export * from './rooms.class.js'
 export * from './rooms.schema.js'
@@ -42,7 +43,7 @@ export const rooms = (app) => {
       find: [],
       get: [],
       create: [setupId, setupRoomData, schemaHooks.validateData(roomsDataValidator), schemaHooks.resolveData(roomsDataResolver)],
-      patch: [schemaHooks.validateData(roomsPatchValidator), schemaHooks.resolveData(roomsPatchResolver)],
+      patch: [schemaHooks.validateData(roomsPatchValidator), schemaHooks.resolveData(roomsPatchResolver), setupTimeout],
       remove: []
     },
     after: {

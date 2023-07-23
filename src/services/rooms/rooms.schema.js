@@ -16,27 +16,29 @@ export const roomsSchema = Type.Object(
     affliction: Type.Optional(StringEnum(enums.bodyParts)),
     conditionRate: Type.Number({ minimum: 0, maximum: 5 }),
     resultAffliction: Type.Optional(StringEnum(enums.bodyParts)),
-    resultConditionRate: Type.Optional(Type.Number({ minimum: 0, maximum: 5 }))
+    resultConditionRate: Type.Optional(Type.Number({ minimum: 0, maximum: 5 })),
+    isOpen: Type.Boolean(),
+    isActive: Type.Boolean()
   },
   { $id: 'Rooms', additionalProperties: false }
 )
 export const roomsValidator = getValidator(roomsSchema, dataValidator)
 export const roomsResolver = resolve({
-  isOpen: virtual(async (data, context) => {
-    return data.volunteer === null
-  }),
-  isActive: virtual(async (data, context) => {
-    const start = new Date(data.updatedAt).getTime()
-    const now = Date.now()
-    const diff = (now - start) / (1000 * 60)
-    return diff > 5
-  })
+  // isOpen: virtual(async (data, context) => {
+  //   return data.volunteer === null
+  // }),
+  // isActive: virtual(async (data, context) => {
+  //   const start = new Date(data.updatedAt).getTime()
+  //   const now = Date.now()
+  //   const diff = (now - start) / (1000 * 60)
+  //   return diff > 5
+  // })
 })
 
 export const roomsExternalResolver = resolve({})
 
 // Schema for creating new entries
-export const roomsDataSchema = Type.Pick(roomsSchema, ['id', 'patient', 'volunteer', 'description', 'affliction', 'conditionRate'], {
+export const roomsDataSchema = Type.Pick(roomsSchema, ['id', 'patient', 'volunteer', 'description', 'affliction', 'conditionRate', 'isOpen', 'isActive'], {
   $id: 'RoomsData'
 })
 export const roomsDataValidator = getValidator(roomsDataSchema, dataValidator)
@@ -50,18 +52,14 @@ export const roomsPatchValidator = getValidator(roomsPatchSchema, dataValidator)
 export const roomsPatchResolver = resolve({})
 
 // Schema for allowed query properties
-export const roomsQueryProperties = Type.Pick(roomsSchema, ['id', 'patient', 'volunteer', 'createdAt', 'isOpen'])
+export const roomsQueryProperties = Type.Pick(roomsSchema, ['id', 'patient', 'volunteer', 'createdAt', 'isOpen', 'isActive'])
 export const roomsQuerySchema = Type.Intersect(
   [
     querySyntax(roomsQueryProperties),
     // Add additional query properties here
-    Type.Object({}, { additionalProperties: true })
+    Type.Object({}, { additionalProperties: false })
   ],
-  { additionalProperties: true }
+  { additionalProperties: false }
 )
 export const roomsQueryValidator = getValidator(roomsQuerySchema, queryValidator)
-export const roomsQueryResolver = resolve({
-  isOpen: virtual(async(data, context) => {
-    return true
-  })
-})
+export const roomsQueryResolver = resolve({})

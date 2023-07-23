@@ -25,8 +25,14 @@ export const channels = () => {
       })
       const [room] = data
 
+      console.log(room)
       if (!room) {
         throw new NotFound(`Active room not found.`)
+      }
+
+      if (room.isOpen && connection.user.role === 'volunteer') {
+        console.log('onVolunteer')
+        app.service('rooms').patch(room.id, { isOpen: false, updatedAt: new Date().toISOString() })
       }
 
       app.channel(`rooms/${room.id}`).join(connection)
@@ -43,6 +49,12 @@ export const channels = () => {
 
   app.service('rooms').publish('join', (data, context) => {
     return app.channel(`rooms/${data.roomId}`)
+  })
+
+  app.service('rooms').on('timeout', ({ roomId }) => {
+    console.log('Timeout')
+    app.channel(`rooms/${roomId}`).leave(c => c)
+    app.service('rooms').patch(roomId, {isActive: false})
   })
 
   app.service('messages').publish('created', (data, context) => {
