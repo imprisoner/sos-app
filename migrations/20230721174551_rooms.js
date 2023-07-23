@@ -8,15 +8,17 @@ export async function up(knex) {
     table.uuid('id').primary().defaultTo(knex.fn.uuid()).unique()
     table.timestamp('createdAt').defaultTo(knex.fn.now())
     table.timestamp('updatedAt').defaultTo(knex.fn.now())
-    table.uuid('patientId')
-    table.foreign('patientId').references('id').inTable('users')
+    table.uuid('patient')
+    table.foreign('patient').references('id').inTable('users')
+    table.uuid('volunteer')
+    table.foreign('volunteer').references('id').inTable('users')
     table.text('description')
     table.enu('affliction', enums.bodyParts, { useNative: true, enumName: 'bodyPart' })
     table.integer('conditionRate')
     table.boolean('isOpen').defaultTo(true)
-    table
-      .enu('status', enums.roomStatus, { useNative: true, enumName: 'roomStatus' })
-      .defaultTo(enums.roomStatus[0])
+    table.boolean('isActive').defaultTo(true)
+    table.enu('resultAffliction', enums.bodyParts, { useNative: true, existingType: true, enumName: 'bodyPart' })
+    table.integer('resultConditionRate')
   })
 }
 /**

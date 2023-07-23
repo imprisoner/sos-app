@@ -3,7 +3,7 @@ export const setupRoomData = (context, next) => {
 
   const userId = user.id
 
-  context.data = { patientId: userId, ...context.data }
+  context.data = { patient: userId, ...context.data }
 
   return context
 }

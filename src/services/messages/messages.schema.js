@@ -1,5 +1,5 @@
 // // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
-import { resolve } from '@feathersjs/schema'
+import { resolve, virtual } from '@feathersjs/schema'
 import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
 import { dataValidator, queryValidator } from '../../validators.js'
 
@@ -8,6 +8,7 @@ export const messagesSchema = Type.Object(
   {
     id: Type.String({ format: 'uuid' }),
     userId: Type.String({ format: 'uuid' }), // foreign key
+    userName: Type.String({ minLength: 1 }),
     roomId: Type.String({ format: 'uuid' }),
     createdAt: Type.Integer(),
     content: Type.String({ minLength: 1 })
@@ -15,12 +16,26 @@ export const messagesSchema = Type.Object(
   { $id: 'Messages', additionalProperties: false }
 )
 export const messagesValidator = getValidator(messagesSchema, dataValidator)
-export const messagesResolver = resolve({})
+export const messagesResolver = resolve({
+  createdAt: (value) => {
+    const date = new Date(value)
+    const hours = date.getHours()
+    const minutes = date.getMinutes()
+
+    return `${hours}:${minutes}`
+  },
+  from: virtual(async (data) => {
+    return {
+      id: data.userId,
+      name: data.userName
+    }
+  })
+})
 
 export const messagesExternalResolver = resolve({})
 
 // Schema for creating new entries
-export const messagesDataSchema = Type.Pick(messagesSchema, ['id', 'userId', 'roomId', 'content'], {
+export const messagesDataSchema = Type.Pick(messagesSchema, ['id', 'userId', 'userName', 'roomId', 'content'], {
   $id: 'MessagesData'
 })
 export const messagesDataValidator = getValidator(messagesDataSchema, dataValidator)

@@ -5,10 +5,10 @@ export const setupUserId = (context, next) => {
     return context
   }
 
-  const roomId = headers['x-room-id']
   const userId = user.id
+  const userName = user.name
 
-  context.data = { userId, roomId, ...context.data }
+  context.data = { userId, userName, ...context.data }
 
   return context
 }
