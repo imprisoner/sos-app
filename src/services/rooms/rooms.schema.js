@@ -17,39 +17,38 @@ export const roomsSchema = Type.Object(
     conditionRate: Type.Number({ minimum: 0, maximum: 5 }),
     resultAffliction: Type.Optional(StringEnum(enums.bodyParts)),
     resultConditionRate: Type.Optional(Type.Number({ minimum: 0, maximum: 5 })),
-    isOpen: Type.Boolean(),
-    isActive: Type.Boolean()
+    isOpen: Type.Boolean({
+      default: true
+    }),
+    isActive: Type.Boolean({
+      default: true
+    })
   },
   { $id: 'Rooms', additionalProperties: false }
 )
 export const roomsValidator = getValidator(roomsSchema, dataValidator)
-export const roomsResolver = resolve({
-  // isOpen: virtual(async (data, context) => {
-  //   return data.volunteer === null
-  // }),
-  // isActive: virtual(async (data, context) => {
-  //   const start = new Date(data.updatedAt).getTime()
-  //   const now = Date.now()
-  //   const diff = (now - start) / (1000 * 60)
-  //   return diff > 5
-  // })
-})
+export const roomsResolver = resolve({})
 
 export const roomsExternalResolver = resolve({})
 
 // Schema for creating new entries
-export const roomsDataSchema = Type.Pick(roomsSchema, ['id', 'patient', 'volunteer', 'description', 'affliction', 'conditionRate', 'isOpen', 'isActive'], {
+export const roomsDataSchema = Type.Pick(roomsSchema, ['id', 'patient', 'volunteer', 'description', 'affliction', 'conditionRate' ], {
   $id: 'RoomsData'
 })
 export const roomsDataValidator = getValidator(roomsDataSchema, dataValidator)
-export const roomsDataResolver = resolve({})
+export const roomsDataResolver = resolve({
+  isOpen: async () => true,
+  isActive: async () => true
+})
 
 // Schema for updating existing entries
 export const roomsPatchSchema = Type.Partial(roomsSchema, {
   $id: 'RoomsPatch'
 })
 export const roomsPatchValidator = getValidator(roomsPatchSchema, dataValidator)
-export const roomsPatchResolver = resolve({})
+export const roomsPatchResolver = resolve({
+  updatedAt: async () => new Date().toISOString()
+})
 
 // Schema for allowed query properties
 export const roomsQueryProperties = Type.Pick(roomsSchema, ['id', 'patient', 'volunteer', 'createdAt', 'isOpen', 'isActive'])

@@ -1,6 +1,6 @@
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config({path: path.resolve(process.cwd(), '.env.development')})
-}
+// if (process.env.NODE_ENV !== 'production') {
+//   require('dotenv').config({path: path.resolve(process.cwd(), '.env.development')})
+// }
 
 module.exports = {
   host: process.env.APP_HOST,

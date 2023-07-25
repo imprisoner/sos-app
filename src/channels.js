@@ -25,36 +25,34 @@ export const channels = () => {
       })
       const [room] = data
 
-      console.log(room)
       if (!room) {
+        console.log('Not found!')
         throw new NotFound(`Active room not found.`)
       }
-
-      if (room.isOpen && connection.user.role === 'volunteer') {
-        console.log('onVolunteer')
-        app.service('rooms').patch(room.id, { isOpen: false, updatedAt: new Date().toISOString() })
-      }
-
+      console.log('Connecting ' + connection.user.role + ' to room ' + room.id)
       app.channel(`rooms/${room.id}`).join(connection)
       app.service('rooms').emit('join', {
         roomId: room.id,
         user: {
           id: connection.user.id,
-          name: connection.user.name
+          name: connection.user.name,
+          role: connection.user.role
         }
       })
     }
   })
 
-
   app.service('rooms').publish('join', (data, context) => {
     return app.channel(`rooms/${data.roomId}`)
   })
+  
+  app.service('rooms').publish('timeout', (data, context) => {
+    console.log('Publishing timeout')
+    return app.channel(`rooms/${data.roomId}`)
+  })
 
-  app.service('rooms').on('timeout', ({ roomId }) => {
-    console.log('Timeout')
-    app.channel(`rooms/${roomId}`).leave(c => c)
-    app.service('rooms').patch(roomId, {isActive: false})
+  app.service('rooms').publish('close', (data, context) => {
+    return app.channel(`rooms/${data.roomId}`)
   })
 
   app.service('messages').publish('created', (data, context) => {

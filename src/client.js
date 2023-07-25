@@ -5,8 +5,6 @@ import { messagesClient } from './services/messages/messages.shared.js'
 
 import { roomsClient } from './services/rooms/rooms.shared.js'
 
-import { sosClient } from './services/sos/sos.shared.js'
-
 import { messageClient } from './services/messages/messages.shared'
 
 import { userClient } from './services/users/users.shared'
@@ -28,7 +26,6 @@ export const createClient = (connection, authenticationOptions = {}) => {
 
   client.configure(userClient)
   client.configure(messageClient)
-  client.configure(sosClient)
 
   client.configure(roomsClient)
 
