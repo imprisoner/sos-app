@@ -26,10 +26,9 @@ export const channels = () => {
       const [room] = data
 
       if (!room) {
-        console.log('Not found!')
         throw new NotFound(`Active room not found.`)
       }
-      console.log('Connecting ' + connection.user.role + ' to room ' + room.id)
+
       app.channel(`rooms/${room.id}`).join(connection)
       app.service('rooms').emit('join', {
         roomId: room.id,
@@ -47,7 +46,6 @@ export const channels = () => {
   })
   
   app.service('rooms').publish('timeout', (data, context) => {
-    console.log('Publishing timeout')
     return app.channel(`rooms/${data.roomId}`)
   })
 
