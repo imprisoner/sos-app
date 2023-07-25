@@ -11,40 +11,35 @@ services:
       interval: 1s
       timeout: 5s
       retries: 1
-    environment:
-      - POSTGRES_PASSWORD=$DB_PASS
-      - POSTGRES_DB=$DB_NAME
-      - POSTGRES_USER=$DB_USER
-      - PGUSER=$DB_USER
-      - PGDATA=/var/lib/postgresql/data
-      - POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256
+    env_file:
+      - .env
+    # environment:
+    #   - POSTGRES_LOCAL_PORT=$POSTGRES_LOCAL_PORT
+    #   - POSTGRES_PORT=$POSTGRES_PORT
+    #   - PGUSER=$POSTGRES_USER
+    #   - PG_DATA=$PG_DATA
+    #   - POSTGRES_INITDB_ARGS=$POSTGRES_INITDB_ARGS
     ports:
-      - $PGSQL_LOCAL_PORT:$DB_PORT
+      - $POSTGRES_LOCAL_PORT:$POSTGRES_PORT
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - postgres:$PGDATA
   app:
     depends_on:
       - postgres
-
     container_name: sos_api
     image: sos-server:18
     build:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
+    env_file:
+      - .env
     # volumes:
     #   - .:/usr/src/app
     expose:
       - $APP_PORT
     ports:
-      - $NODE_LOCAL_PORT:$APP_PORT
-    environment:
-      - DB_HOST=$DB_HOST
-      - DB_USER=$DB_USER
-      - DB_PASSWORD=$DB_PASS
-      - DB_NAME=$DB_NAME
-      - DB_PORT=$DB_PORT
-      - NODE_ENV=$NODE_ENV
+      - $APP_LOCAL_PORT:$APP_PORT
     stdin_open: true
     tty: true
     command: npm run start

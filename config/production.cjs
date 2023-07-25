@@ -1,9 +1,3 @@
-=======
-// if (process.env.NODE_ENV !== 'production') {
-//   require('dotenv').config({path: path.resolve(process.cwd(), '.env.development')})
-// }
->>>>>>> develop
-
 module.exports = {
   host: process.env.APP_HOST,
   port: Number(process.env.APP_PORT),
@@ -18,11 +12,11 @@ module.exports = {
   postgresql: {
     client: 'pg',
     connection: {
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME
+      host: process.env.POSTGRES_HOST,
+      port: Number(process.env.POSTGRES_PORT),
+      user: process.env.POSTGRES_USER,
+      password: process.env.POSTGRES_PASSWORD,
+      database: process.env.POSTGRES_DB
     }
   },
   authentication: {
@@ -52,7 +46,7 @@ module.exports = {
     secure: true,
     auth: {
       user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS
+      pass: process.env.SMTP_PASSWORD
     }
   }
 }
