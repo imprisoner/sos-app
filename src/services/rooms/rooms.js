@@ -13,10 +13,9 @@ import {
 } from './rooms.schema.js'
 import { RoomsService, getOptions } from './rooms.class.js'
 import { roomsPath, roomsMethods } from './rooms.shared.js'
-import { setupId } from '../../hooks/users/setup-id.js'
-import { setupRoomData } from '../../hooks/rooms/setup-room-data.js'
 import { setupTimeout } from '../../hooks/rooms/setup-timeout.js'
 import { setupVolunteer } from '../../hooks/rooms/setup-volunteer.js'
+import { isPatient } from '../../hooks/policies/is-patient.js'
 
 export * from './rooms.class.js'
 export * from './rooms.schema.js'
@@ -43,7 +42,7 @@ export const rooms = (app) => {
       all: [schemaHooks.validateQuery(roomsQueryValidator), schemaHooks.resolveQuery(roomsQueryResolver)],
       find: [],
       get: [],
-      create: [setupId, setupRoomData, schemaHooks.validateData(roomsDataValidator), schemaHooks.resolveData(roomsDataResolver)],
+      create: [isPatient, schemaHooks.validateData(roomsDataValidator), schemaHooks.resolveData(roomsDataResolver)],
       patch: [setupVolunteer, schemaHooks.validateData(roomsPatchValidator), schemaHooks.resolveData(roomsPatchResolver), setupTimeout],
       remove: []
     },

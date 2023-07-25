@@ -4,6 +4,7 @@ import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
 import { dataValidator, queryValidator } from '../../validators.js'
 import { StringEnum } from '@feathersjs/typebox/lib/index.js'
 import { enums } from '../../constants/databaseTypes.js'
+import { v4 as uuid } from 'uuid'
 // Main data model schema
 export const roomsSchema = Type.Object(
   {
@@ -32,13 +33,19 @@ export const roomsResolver = resolve({})
 export const roomsExternalResolver = resolve({})
 
 // Schema for creating new entries
-export const roomsDataSchema = Type.Pick(roomsSchema, ['id', 'patient', 'volunteer', 'description', 'affliction', 'conditionRate' ], {
+export const roomsDataSchema = Type.Pick(roomsSchema, ['description', 'affliction', 'conditionRate'], {
   $id: 'RoomsData'
 })
 export const roomsDataValidator = getValidator(roomsDataSchema, dataValidator)
 export const roomsDataResolver = resolve({
+  id: async () => uuid(),
   isOpen: async () => true,
-  isActive: async () => true
+  isActive: async () => true,
+  patient: async (value, room, context) => {
+    if (!value) {
+      return context.params?.user.id
+    }
+  }
 })
 
 // Schema for updating existing entries

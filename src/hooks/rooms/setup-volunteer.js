@@ -1,7 +1,6 @@
 import { Unprocessable } from '@feathersjs/errors'
 
 export const setupVolunteer = async (context, next) => {
-  console.log(context.data)
   if (context.data.resultConditionRate >= 0) {
     return context.data
   }
