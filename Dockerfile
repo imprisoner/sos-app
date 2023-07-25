@@ -9,8 +9,13 @@ RUN mkdir -p /usr/src/app
 
 WORKDIR /usr/src/app
 
-COPY ./package*.json ./
+ADD ./package*.json ./
 
-RUN npm install --only=production
+RUN npm ci
 
-COPY  . .
+ADD  ./ ./
+
+# "docker create context remote ssh://ubuntu@sos.luden-labs.com"
+# "docker context use remote"
+# "docker ...any commands..."
+# "docker context use default"

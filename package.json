@@ -39,7 +39,10 @@
     "bundle:client": "npm pack --pack-destination ./public",
     "migrate": "knex migrate:latest",
     "migrate:make": "knex migrate:make",
-    "bootstrap": "node bootstrap.js"
+    "bootstrap": "node bootstrap.js",
+    "docker:deploy": "docker-compose -H  \"ssh://ubuntu@sos.luden-labs.com\" --env-file .env.production up -d --build",
+    "docker:logs": "docker-compose -H \"ssh://ubuntu@sos.luden-labs.com\" logs -f",
+    "docker:inspect": "docker inspect sos_api"
   },
   "dependencies": {
     "@feathersjs/adapter-commons": "^5.0.6",

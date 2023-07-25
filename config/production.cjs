@@ -1,5 +1,7 @@
-if (process.env.NODE_ENV === 'development') {
-  require('dotenv').config()
+const path = require('path')
+
+if (process.env.NODE_ENV === 'production') {
+  require('dotenv').config( { path: path.resolve(process.cwd(), '.env.production'), override: true } )
 }
 
 module.exports = {
@@ -7,7 +9,7 @@ module.exports = {
   port: Number(process.env.APP_PORT),
   public: './public/',
   origins: [
-    'http://localhost:3030'
+    '*'
   ],
   paginate: {
     default: 10,
@@ -19,7 +21,7 @@ module.exports = {
       host: process.env.DB_HOST,
       port: Number(process.env.DB_PORT),
       user: process.env.DB_USER,
-      password: process.env.DB_PASS,
+      password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME
     }
   },
