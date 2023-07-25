@@ -55,6 +55,10 @@ export const channels = () => {
     return app.channel(`rooms/${data.roomId}`)
   })
 
+  app.service('rooms').publish('patched', (data, context) => {
+    return app.channel(`rooms/${data.roomId}`)
+  })
+
   app.service('messages').publish('created', (data, context) => {
     return app.channel(`rooms/${data.roomId}`)
   })
