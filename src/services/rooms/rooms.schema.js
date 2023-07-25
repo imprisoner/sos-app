@@ -1,5 +1,5 @@
 // // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
-import { resolve, virtual } from '@feathersjs/schema'
+import { resolve } from '@feathersjs/schema'
 import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
 import { dataValidator, queryValidator } from '../../validators.js'
 import { StringEnum } from '@feathersjs/typebox/lib/index.js'
@@ -57,9 +57,10 @@ export const roomsPatchSchema = Type.Partial(roomsSchema, {
 export const roomsPatchValidator = getValidator(roomsPatchSchema, dataValidator)
 export const roomsPatchResolver = resolve({
   updatedAt: async () => new Date().toISOString(),
-  volunteer: async ( value, data, context) => {
+  volunteer: async (value, data, context) => {
     const user = context.params
-    if(user && user.role === 'volunteer') {
+
+    if (user && user.role === 'volunteer') {
       return user.id
     }
   }
