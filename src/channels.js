@@ -1,34 +1,66 @@
 import '@feathersjs/transport-commons'
 import { logger } from './logger.js'
+import { app } from './app.js'
+import { NotFound } from '@feathersjs/errors'
 
-export const channels = (app) => {
+export const channels = () => {
   logger.warn(
     'Publishing all events to all authenticated users. See `channels.js` and https://dove.feathersjs.com/api/channels.html for more information.'
   )
 
   app.on('connection', (connection) => {
-    // On a new real-time connection, add it to the anonymous channel
     app.channel('anonymous').join(connection)
   })
 
-  app.on('login', (authResult, { connection }) => {
-    // connection can be undefined if there is no
-    // real-time connection, e.g. when logging in via REST
+  app.on('login', async (authResult, { connection }) => {
     if (connection) {
-      // The connection is no longer anonymous, remove it
       app.channel('anonymous').leave(connection)
-
-      // Add it to the authenticated user channel
       app.channel('authenticated').join(connection)
+
+      const { data } = await app.service('rooms').find({
+        query: {
+          [connection.user.role]: connection.user.id,
+          isActive: true
+        }
+      })
+      const [room] = data
+
+      if (!room) {
+        console.log('Not found!')
+        throw new NotFound(`Active room not found.`)
+      }
+      console.log('Connecting ' + connection.user.role + ' to room ' + room.id)
+      app.channel(`rooms/${room.id}`).join(connection)
+      app.service('rooms').emit('join', {
+        roomId: room.id,
+        user: {
+          id: connection.user.id,
+          name: connection.user.name,
+          role: connection.user.role
+        }
+      })
     }
+  })
+
+  app.service('rooms').publish('join', (data, context) => {
+    return app.channel(`rooms/${data.roomId}`)
+  })
+  
+  app.service('rooms').publish('timeout', (data, context) => {
+    console.log('Publishing timeout')
+    return app.channel(`rooms/${data.roomId}`)
+  })
+
+  app.service('rooms').publish('close', (data, context) => {
+    return app.channel(`rooms/${data.roomId}`)
+  })
+
+  app.service('messages').publish('created', (data, context) => {
+    return app.channel(`rooms/${data.roomId}`)
   })
 
   // eslint-disable-next-line no-unused-vars
   app.publish((data, context) => {
-    // Here you can add event publishers to channels set up in `channels.js`
-    // To publish only for a specific event use `app.publish(eventname, () => {})`
-
-    // e.g. to publish all service events to all authenticated users use
     return app.channel('authenticated')
   })
 }

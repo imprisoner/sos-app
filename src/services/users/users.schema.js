@@ -4,6 +4,7 @@ import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
 import { passwordHash } from '@feathersjs/authentication-local'
 import { dataValidator, queryValidator } from '../../validators.js'
 import { StringEnum } from '@feathersjs/typebox'
+import { enums } from '../../constants/databaseTypes.js'
 // Main data model schema
 export const userSchema = Type.Object(
   {
@@ -28,9 +29,9 @@ export const userSchema = Type.Object(
       }
     ),
 
-    role: StringEnum(['patient', 'volunteer']),
+    role: StringEnum(enums.userRole),
 
-    preferredLang: StringEnum(['en', 'ru']),
+    preferredLang: StringEnum(enums.userPreferredLang),
 
     emailVerified: Type.Boolean({
       default: false

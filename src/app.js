@@ -28,24 +28,20 @@ app.configure(openapi)
 app.configure(rest())
 app.configure(mailer)
 
-app.configure(
-  socketio({
-    cors: {
-      origin: app.get('origins')
-    }
-  })
-)
-app.configure(channels)
+app.configure(socketio())
 app.configure(postgresql)
 app.configure(authentication)
 app.configure(services)
+app.configure(channels)
 
 // Register hooks that run on all service methods
 app.hooks({
   around: {
     all: [logError]
   },
-  before: {},
+  before: {
+    all: []
+  },
   after: {},
   error: {}
 })

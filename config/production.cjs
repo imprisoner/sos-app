@@ -1,8 +1,8 @@
-const path = require('path')
-
-if (process.env.NODE_ENV === 'production') {
-  require('dotenv').config( { path: path.resolve(process.cwd(), '.env.production'), override: true } )
-}
+=======
+// if (process.env.NODE_ENV !== 'production') {
+//   require('dotenv').config({path: path.resolve(process.cwd(), '.env.development')})
+// }
+>>>>>>> develop
 
 module.exports = {
   host: process.env.APP_HOST,
