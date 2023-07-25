@@ -14,7 +14,7 @@ import {
 import { RoomsService, getOptions } from './rooms.class.js'
 import { roomsPath, roomsMethods } from './rooms.shared.js'
 import { setupTimeout } from '../../hooks/rooms/setup-timeout.js'
-import { isPatient, isVolunteer } from '../../hooks/policies/is-patient.js'
+import { isPatient } from '../../hooks/policies/is-patient.js'
 import { isVolunteer } from '../../hooks/policies/is-volunteer.js'
 
 export * from './rooms.class.js'

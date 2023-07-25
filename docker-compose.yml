@@ -13,12 +13,6 @@ services:
       retries: 1
     env_file:
       - .env
-    # environment:
-    #   - POSTGRES_LOCAL_PORT=$POSTGRES_LOCAL_PORT
-    #   - POSTGRES_PORT=$POSTGRES_PORT
-    #   - PGUSER=$POSTGRES_USER
-    #   - PG_DATA=$PG_DATA
-    #   - POSTGRES_INITDB_ARGS=$POSTGRES_INITDB_ARGS
     ports:
       - $POSTGRES_LOCAL_PORT:$POSTGRES_PORT
     volumes:
