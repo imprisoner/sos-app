@@ -45,7 +45,9 @@ export const roomsDataResolver = resolve({
     if (!value) {
       return context.params?.user.id
     }
-  }
+  },
+  affliction: async (value) => value ? value : null,
+  resultAffliction: async () => null
 })
 
 // Schema for updating existing entries
@@ -54,7 +56,13 @@ export const roomsPatchSchema = Type.Partial(roomsSchema, {
 })
 export const roomsPatchValidator = getValidator(roomsPatchSchema, dataValidator)
 export const roomsPatchResolver = resolve({
-  updatedAt: async () => new Date().toISOString()
+  updatedAt: async () => new Date().toISOString(),
+  volunteer: async ( value, data, context) => {
+    const user = context.params
+    if(user && user.role === 'volunteer') {
+      return user.id
+    }
+  }
 })
 
 // Schema for allowed query properties
