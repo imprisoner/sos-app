@@ -3,6 +3,5 @@ import mailerService from 'feathers-mailer'
 
 export const mailer = (app) => {
   const config = app.get('mailer')
-  console.log(process.env.SMTP_PASS)
   app.use('mailer', mailerService(config, {from: config.auth.user}))
 }
