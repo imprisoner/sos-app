@@ -1,4 +1,5 @@
 import { GeneralError } from '@feathersjs/errors';
+import { logger } from '../../logger.js'
 
 export const sendVerificationEmail = async (context, next) => {
   const { emailVerificationToken } = context.result
@@ -15,7 +16,7 @@ export const sendVerificationEmail = async (context, next) => {
   try {
     const result = await context.app.service('mailer').create(mailData);
     if (result) {
-      console.log('Verification email OK')
+      logger.info('Verification email OK')
     }
   } catch (err) {
     throw new GeneralError('Something went wrong with emails, try again or contact support')
