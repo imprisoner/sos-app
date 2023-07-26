@@ -16,6 +16,7 @@ import { roomsPath, roomsMethods } from './rooms.shared.js'
 import { setupTimeout } from '../../hooks/rooms/setup-timeout.js'
 import { isPatient } from '../../hooks/policies/is-patient.js'
 import { isVolunteer } from '../../hooks/policies/is-volunteer.js'
+import { checkActiveRooms } from '../../hooks/rooms/check-active-rooms.js'
 
 export * from './rooms.class.js'
 export * from './rooms.schema.js'
@@ -42,7 +43,7 @@ export const rooms = (app) => {
       all: [schemaHooks.validateQuery(roomsQueryValidator), schemaHooks.resolveQuery(roomsQueryResolver)],
       find: [isVolunteer],
       get: [isVolunteer],
-      create: [isPatient, schemaHooks.validateData(roomsDataValidator), schemaHooks.resolveData(roomsDataResolver)],
+      create: [isPatient, checkActiveRooms, schemaHooks.validateData(roomsDataValidator), schemaHooks.resolveData(roomsDataResolver)],
       patch: [schemaHooks.validateData(roomsPatchValidator), schemaHooks.resolveData(roomsPatchResolver), setupTimeout],
       remove: []
     },
