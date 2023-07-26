@@ -1,3 +1,4 @@
+require('dotenv').config()
 module.exports = {
   host: process.env.APP_HOST,
   port: Number(process.env.APP_PORT),
