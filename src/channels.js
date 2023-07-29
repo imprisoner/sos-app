@@ -20,9 +20,14 @@ export const channels = () => {
       const { data } = await app.service('rooms').find({
         query: {
           [connection.user.role]: connection.user.id,
-          isActive: true
+          isActive: true,
+          $sort: {
+            createdAt: -1
+          }
         }
       })
+
+
       const [room] = data
 
       if (!room) {
@@ -41,16 +46,29 @@ export const channels = () => {
     }
   })
 
+
+  app.service('rooms').on('close', (data, context) => {
+    return app.channel(`rooms/${data.roomId}`).leave((connection) => connection)
+  })
+
   app.service('rooms').publish('join', (data, context) => {
+    console.log('Joining room ' + data.roomId)
     return app.channel(`rooms/${data.roomId}`)
   })
   
   app.service('rooms').publish('timeout', (data, context) => {
+    console.log('Publish timeout', data.roomId)
     return app.channel(`rooms/${data.roomId}`)
   })
 
   app.service('rooms').publish('close', (data, context) => {
     return app.channel(`rooms/${data.roomId}`)
+  })
+
+  app.service('rooms').publish('typing', (data, context) => {
+    return app.channel(`rooms/${data.roomId}`).filter((connection) => {
+      return connection.user.id !== data.id
+    })
   })
 
   app.service('rooms').publish('patched', (data, context) => {

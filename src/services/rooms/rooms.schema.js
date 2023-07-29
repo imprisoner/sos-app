@@ -58,7 +58,7 @@ export const roomsPatchValidator = getValidator(roomsPatchSchema, dataValidator)
 export const roomsPatchResolver = resolve({
   updatedAt: async () => new Date().toISOString(),
   volunteer: async (value, data, context) => {
-    const user = context.params
+    const { user } = context.params
 
     if (user && user.role === 'volunteer') {
       return user.id

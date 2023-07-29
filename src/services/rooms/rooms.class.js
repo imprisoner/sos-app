@@ -8,9 +8,16 @@ export class RoomsService extends KnexService {
 
   async close(data, params) {
     this.emit('close', data)
-    const { userId, roomId } = data
+    const { roomId } = data
     await this.patch(roomId, { isActive: false })
-    return {msg: 'ok'}
+    return { msg: 'ok' }
+  }
+
+  async typing(data, params) {
+    const { user } = params
+
+    this.emit('typing', { id: user.id, name: user.name, roomId: data.roomId })
+    return data
   }
 }
 

@@ -28,8 +28,6 @@ services:
     restart: unless-stopped
     env_file:
       - .env
-    # volumes:
-    #   - .:/usr/src/app
     expose:
       - $APP_PORT
     ports:

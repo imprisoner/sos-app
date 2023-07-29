@@ -78,7 +78,7 @@ export const user = (app) => {
         checkEmailPresence,
         approveCreation,
         setupId,
-        setupEmailVerification
+        setupEmailVerification // drop email service
       ],
       patch: [schemaHooks.validateData(userPatchValidator), schemaHooks.resolveData(userPatchResolver)],
       remove: [],
@@ -87,7 +87,7 @@ export const user = (app) => {
     after: {
       all: [],
       create: [
-        sendVerificationEmail
+        sendVerificationEmail // drop email service
       ]
     },
     error: {

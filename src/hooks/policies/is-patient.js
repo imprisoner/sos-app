@@ -4,7 +4,7 @@ export const isPatient = async (context, next) => {
   const { user } = context.params
 
   if (user && user.role !== 'patient') {
-    context.result = new NotAuthorized('Your role is not allowed here')
+    context.result = new Unauthorized('Your role is not allowed here')
   }
 
   return context

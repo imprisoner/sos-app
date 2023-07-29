@@ -1,6 +1,9 @@
 import Knex from 'knex'
 import dotenv from 'dotenv'
 import path from "node:path"
+import nodemailer from 'nodemailer'
+import { logger } from './src/logger.js'
+import { app } from './src/app.js'
 
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config(
@@ -8,21 +11,17 @@ if (process.env.NODE_ENV !== 'production') {
   )
 }
 
-const databaseName = process.env.POSTGRES_DB
-
-const connection = {
-  host: process.env.POSTGRES_HOST,
-  port: Number(process.env.POSTGRES_PORT),
-  user: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  database: databaseName,
+try {
+  const isVerifiedSmtp = await nodemailer.createTransport(app.get('mailer')).verify()
+  logger.info(`SMTP ok: ${isVerifiedSmtp}`)
+} catch (err) {
+  logger.error(err)
 }
 
+const databaseName = process.env.POSTGRES_DB
+
 async function main() {
-  let db = Knex({
-    client: 'pg',
-    connection
-  })
+  let db = Knex(app.get('postgresql'))
 
   const { rows } = await db.raw('SELECT datname from pg_database')
   const isExists = rows.find(({ datname }) => datname === databaseName)
