@@ -1,5 +1,6 @@
 import { GeneralError } from '@feathersjs/errors';
-import { logger } from '../../logger.js'
+import { logger } from '../../logger.js';
+
 
 export const sendPasswordEmail = async (context, next) => {
   const { password } = context.result
@@ -13,12 +14,7 @@ export const sendPasswordEmail = async (context, next) => {
     text: textMessage || ''
   };
 
-  try {
-    const result = await context.app.service('mailer').create(mailData)
-    if (result) {
-      logger.info('Password email OK')
-    }
-  } catch (err) {
-    throw new GeneralError('Something went wrong with emails, try again or contact support')
-  }
+  context.app.service('mailer').create(mailData)
+    .then(logger.info)
+    .catch(logger.warn)
 }

@@ -34,7 +34,7 @@ export const forgotPassword = (app) => {
     },
     after: {
       create: [
-        sendPasswordEmail
+        sendPasswordEmail // drom mail service
       ]
     }
   })

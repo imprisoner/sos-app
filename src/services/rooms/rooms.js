@@ -27,7 +27,7 @@ export const rooms = (app) => {
     // A list of all methods this service exposes externally
     methods: roomsMethods,
     // You can add additional custom events to be sent to clients here
-    events: ['join', 'timeout', 'close']
+    events: ['join', 'timeout', 'close', 'typing']
   })
   // Initialize hooks
   app.service(roomsPath).hooks({
