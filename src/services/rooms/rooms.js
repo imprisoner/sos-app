@@ -14,8 +14,7 @@ import {
 import { RoomsService, getOptions } from './rooms.class.js'
 import { roomsPath, roomsMethods } from './rooms.shared.js'
 import { setupTimeout } from '../../hooks/rooms/setup-timeout.js'
-import { isAllowed } from '../../hooks/policies/is-allowed.js'
-import { checkActiveRooms } from '../../hooks/rooms/check-active-rooms.js'
+import { isRole } from '../../hooks/policies/is-role.js'
 
 export * from './rooms.class.js'
 export * from './rooms.schema.js'
@@ -40,9 +39,9 @@ export const rooms = (app) => {
     },
     before: {
       all: [schemaHooks.validateQuery(roomsQueryValidator), schemaHooks.resolveQuery(roomsQueryResolver)],
-      find: [isAllowed('volunteer')],
-      get: [isAllowed('volunteer')],
-      create: [isAllowed('patient'), checkActiveRooms, schemaHooks.validateData(roomsDataValidator), schemaHooks.resolveData(roomsDataResolver)],
+      find: [isRole('volunteer')],
+      get: [isRole('volunteer')],
+      create: [isRole('patient'), schemaHooks.validateData(roomsDataValidator), schemaHooks.resolveData(roomsDataResolver)],
       patch: [schemaHooks.validateData(roomsPatchValidator), schemaHooks.resolveData(roomsPatchResolver), setupTimeout],
       remove: []
     },

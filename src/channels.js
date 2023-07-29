@@ -26,8 +26,7 @@ export const channels = () => {
           }
         }
       })
-
-
+      
       const [room] = data
 
       if (!room) {
@@ -72,7 +71,8 @@ export const channels = () => {
   })
 
   app.service('rooms').publish('patched', (data, context) => {
-    return app.channel(`rooms/${data.roomId}`)
+    console.log('on room patch', data)
+    return app.channel(`rooms/${data.id}`)
   })
 
   app.service('messages').publish('created', (data, context) => {
