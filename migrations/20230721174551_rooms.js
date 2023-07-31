@@ -13,7 +13,7 @@ export async function up(knex) {
     table.uuid('volunteer')
     table.foreign('volunteer').references('id').inTable('users')
     table.text('description')
-    table.enu('affliction', enums.bodyParts, { useNative: true, enumName: 'bodyPart' })
+    table.enu('affliction', ['head', 'stomach', 'heart'], { useNative: true, enumName: 'bodyPart' })
     table.integer('conditionRate')
     table.boolean('isOpen').defaultTo(true)
     table.boolean('isActive').defaultTo(true)

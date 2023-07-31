@@ -24,3 +24,4 @@ lib-cov
 .env.local
 .env.development
 .env.production
+sql
