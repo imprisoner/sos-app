@@ -1,4 +1,5 @@
 import { KnexService } from '@feathersjs/knex'
+import { logger } from '../../logger.js'
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
 export class RoomsService extends KnexService {
   async timeout(data, params) {
@@ -7,16 +8,33 @@ export class RoomsService extends KnexService {
   }
 
   async close(data, params) {
-    this.emit('close', data)
+    const { user } = params
     const { roomId } = data
-    await this.patch(roomId, { isActive: false })
-    return { msg: 'ok' }
+
+    const room = await this.patch(roomId, { isActive: false })
+      .catch(logger.warn)
+
+    data = {
+      id: user.id,
+      name: user.name,
+      roomId,
+      isActive: room.isActive
+    }
+
+    this.emit('close', data)
+    return data
   }
 
   async typing(data, params) {
     const { user } = params
 
-    this.emit('typing', { id: user.id, name: user.name, roomId: data.roomId })
+    data = {
+      id: user.id,
+      name: user.name,
+      roomId: data.roomId
+    }
+
+    this.emit('typing', data)
     return data
   }
 }
