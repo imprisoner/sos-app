@@ -14,8 +14,7 @@ import {
 } from './messages.schema.js'
 import { MessagesService, getOptions } from './messages.class.js'
 import { messagesPath, messagesMethods } from './messages.shared.js'
-import { setupId } from '../../hooks/users/setup-id.js'
-import { setupUserId } from '../../hooks/messages/setup-message-data.js'
+// import { setupMessageData } from '../../hooks/messages/setup-message-data.js'
 
 export * from './messages.class.js'
 export * from './messages.schema.js'
@@ -46,8 +45,7 @@ export const messages = (app) => {
       find: [],
       get: [],
       create: [
-        setupId,
-        setupUserId,
+        // setupUserId,
         schemaHooks.validateData(messagesDataValidator),
         schemaHooks.resolveData(messagesDataResolver)
       ],

@@ -1,4 +1,4 @@
-export const setupUserId = (context, next) => {
+export const setupMessageData = (context, next) => {
   const { params: { provider, headers, user } } = context
 
   if (provider !== 'socketio') {

@@ -35,11 +35,15 @@ export const messagesResolver = resolve({
 export const messagesExternalResolver = resolve({})
 
 // Schema for creating new entries
-export const messagesDataSchema = Type.Pick(messagesSchema, ['id', 'userId', 'userName', 'roomId', 'content'], {
+export const messagesDataSchema = Type.Pick(messagesSchema, ['roomId', 'content'], {
   $id: 'MessagesData'
 })
+
 export const messagesDataValidator = getValidator(messagesDataSchema, dataValidator)
-export const messagesDataResolver = resolve({})
+export const messagesDataResolver = resolve({
+  userId: async (_, __, { params }) => params.user.id,
+  userName: async (_, __, { params }) => params.user.name
+})
 
 // Schema for updating existing entries
 export const messagesPatchSchema = Type.Partial(messagesSchema, {
