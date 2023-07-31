@@ -14,7 +14,7 @@ import {
 } from './messages.schema.js'
 import { MessagesService, getOptions } from './messages.class.js'
 import { messagesPath, messagesMethods } from './messages.shared.js'
-// import { setupMessageData } from '../../hooks/messages/setup-message-data.js'
+import { isSockets } from '../../hooks/messages/is-sockets.js'
 
 export * from './messages.class.js'
 export * from './messages.schema.js'
@@ -45,7 +45,7 @@ export const messages = (app) => {
       find: [],
       get: [],
       create: [
-        // setupUserId,
+        isSockets,
         schemaHooks.validateData(messagesDataValidator),
         schemaHooks.resolveData(messagesDataResolver)
       ],
