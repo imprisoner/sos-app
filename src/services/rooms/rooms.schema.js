@@ -5,6 +5,7 @@ import { dataValidator, queryValidator } from '../../validators.js'
 import { StringEnum } from '@feathersjs/typebox/lib/index.js'
 import { enums } from '../../constants/databaseTypes.js'
 import { v4 as uuid } from 'uuid'
+import { parsePgArray } from '../../helpers/parsePgArray.js'
 // Main data model schema
 export const roomsSchema = Type.Object(
   {
@@ -14,9 +15,13 @@ export const roomsSchema = Type.Object(
     patient: Type.String({ format: 'uuid' }),
     volunteer: Type.Optional(Type.String({ format: 'uuid' })),
     description: Type.String({ minLength: 1 }),
-    affliction: Type.Optional(StringEnum(enums.bodyParts)),
+    affliction: Type.Optional(
+      Type.Array(StringEnum(enums.bodyParts))
+    ),
     conditionRate: Type.Number({ minimum: 0, maximum: 5 }),
-    resultAffliction: Type.Optional(StringEnum(enums.bodyParts)),
+    resultAffliction: Type.Optional(
+      Type.Array(StringEnum(enums.bodyParts))
+    ),
     resultConditionRate: Type.Optional(Type.Number({ minimum: 0, maximum: 5 })),
     isOpen: Type.Boolean({
       default: true
@@ -28,7 +33,10 @@ export const roomsSchema = Type.Object(
   { $id: 'Rooms', additionalProperties: false }
 )
 export const roomsValidator = getValidator(roomsSchema, dataValidator)
-export const roomsResolver = resolve({})
+export const roomsResolver = resolve({
+  affliction: parsePgArray,
+  resultAffliction: parsePgArray
+})
 
 export const roomsExternalResolver = resolve({})
 
@@ -46,8 +54,7 @@ export const roomsDataResolver = resolve({
       return context.params?.user.id
     }
   },
-  affliction: async (value) => value ? value : null,
-  resultAffliction: async () => null
+  // affliction: async (value) => value ? value : ['none']
 })
 
 // Schema for updating existing entries
@@ -63,7 +70,8 @@ export const roomsPatchResolver = resolve({
     if (user && user.role === 'volunteer') {
       return user.id
     }
-  }
+  },
+  // resultAffliction: async (value) => value ? value : ['none']
 })
 
 // Schema for allowed query properties
