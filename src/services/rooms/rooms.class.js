@@ -14,7 +14,7 @@ export class RoomsService extends KnexService {
     const room = await this.patch(roomId, { isActive: false })
       .catch(logger.warn)
 
-    data = {
+      data = {
       id: user.id,
       name: user.name,
       roomId,
