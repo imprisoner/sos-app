@@ -15,7 +15,7 @@ export const sendVerificationEmail = async (context, next) => {
   };
 
   context.app.service('mailer').create(mailData)
-    .then(logger.info).catch(logger.warn)
+    .then((data) => logger.info(JSON.stringify(data))).catch(logger.warn)
 
   return context
 }

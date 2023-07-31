@@ -15,6 +15,6 @@ export const sendPasswordEmail = async (context, next) => {
   };
 
   context.app.service('mailer').create(mailData)
-    .then(logger.info)
+    .then((data) => JSON.stringify(data))
     .catch(logger.warn)
 }

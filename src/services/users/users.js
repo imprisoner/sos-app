@@ -18,7 +18,6 @@ import {
 import { UserService, UserCustomService, getOptions } from './users.class.js'
 
 import { checkEmailPresence } from '../../hooks/check-email-presence.js'
-import { setupId } from '../../hooks/users/setup-id.js'
 import { sendVerificationEmail } from '../../hooks/users/send-verification-email.js'
 import { setupEmailVerification } from '../../hooks/users/setupEmailVerification.js'
 
@@ -77,8 +76,7 @@ export const user = (app) => {
         schemaHooks.resolveData(userDataResolver),
         checkEmailPresence,
         approveCreation,
-        setupId,
-        setupEmailVerification // drop email service
+        setupEmailVerification
       ],
       patch: [schemaHooks.validateData(userPatchValidator), schemaHooks.resolveData(userPatchResolver)],
       remove: [],
@@ -87,7 +85,7 @@ export const user = (app) => {
     after: {
       all: [],
       create: [
-        sendVerificationEmail // drop email service
+        sendVerificationEmail
       ]
     },
     error: {

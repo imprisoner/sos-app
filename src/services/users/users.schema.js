@@ -90,7 +90,7 @@ export const userQuerySchema = Type.Intersect(
 export const userQueryValidator = getValidator(userQuerySchema, queryValidator)
 export const userQueryResolver = resolve({
   // If there is a user (e.g. with authentication), they are only allowed to see their own data
-  id: async (value, user, context) => {
+  id: async (value, __, context) => {
     if (context.params.user) {
       return context.params.user.id
     }
