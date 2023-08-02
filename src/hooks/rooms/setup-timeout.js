@@ -7,8 +7,10 @@ export const setupTimeout = (context, next) => {
     const data = {
       roomId: context.id
     }
-    setTimeout(() => {
-      context.service.timeout(data)
-    }, 15000)
+    new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(context.service.timeout(data))
+      }, 15000)
+    })
   }
 }
