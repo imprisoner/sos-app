@@ -13,35 +13,46 @@ export const channels = () => {
   })
 
   app.on('login', async (authResult, { connection }) => {
+    if (!connection) {
+      return
+    }
 
     app.channel('anonymous').leave(connection)
     app.channel('authenticated').join(connection)
 
-    if (connection) {
-      const { data: [room] } = await app.service('rooms').find({
-        query: {
-          [connection.user.role]: connection.user.id,
-          isActive: true,
-          $sort: { createdAt: -1 }
-        }
-      })
-
-      if (!room) {
-        throw new NotFound(`Active room not found.`)
-      }
-
-      app.channel(`rooms/${room.id}`).join(connection)
-      app.service('rooms').emit('join', {
-        roomId: room.id,
-        user: {
-          id: connection.user.id,
-          name: connection.user.name,
-          role: connection.user.role
-        }
-      })
+    const joinedUser = connection.user
+    const query = {
+      [joinedUser.role]: joinedUser.id,
+      isActive: true,
+      $sort: { createdAt: -1 }
     }
-  })
 
+    const {
+      data: [room]
+    } = await app.service('rooms').find({ query })
+
+    if (!room) {
+      throw new NotFound(`Active room not found.`)
+    }
+
+    const audience = app.channel(`rooms/${room.id}`).connections.map((connection) => {
+      const {id, name, role, avatar} = connection.user
+
+      return {id, name, role, avatar}
+    })
+
+    app.channel(`rooms/${room.id}`).join(connection)
+    app.service('rooms').emit('join', {
+      roomId: room.id,
+      joined: {
+        id: joinedUser.id,
+        name: joinedUser.name,
+        role: joinedUser.role,
+        avatar: joinedUser.avatar
+      },
+      audience
+    })
+  })
 
   app.service('rooms').on('close', (data, context) => {
     return new Promise((resolve) => {
@@ -56,7 +67,9 @@ export const channels = () => {
   })
 
   app.service('rooms').publish('timeout', (data, context) => {
-    return app.channel(`rooms/${data.roomId}`)
+    return app.channel(`rooms/${data.roomId}`).send({
+      roomId: data.roomId
+    })
   })
 
   app.service('rooms').publish('close', (data, context) => {

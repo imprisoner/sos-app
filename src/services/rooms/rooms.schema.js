@@ -1,5 +1,5 @@
 // // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
-import { resolve } from '@feathersjs/schema'
+import { resolve, virtual } from '@feathersjs/schema'
 import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
 import { dataValidator, queryValidator } from '../../validators.js'
 import { StringEnum } from '@feathersjs/typebox/lib/index.js'
@@ -15,13 +15,9 @@ export const roomsSchema = Type.Object(
     patient: Type.String({ format: 'uuid' }),
     volunteer: Type.Optional(Type.String({ format: 'uuid' })),
     description: Type.String({ minLength: 1 }),
-    affliction: Type.Optional(
-      Type.Array(StringEnum(enums.bodyParts))
-    ),
+    affliction: Type.Optional(Type.Array(StringEnum(enums.bodyParts))),
     conditionRate: Type.Number({ minimum: 0, maximum: 5 }),
-    resultAffliction: Type.Optional(
-      Type.Array(StringEnum(enums.bodyParts))
-    ),
+    resultAffliction: Type.Optional(Type.Array(StringEnum(enums.bodyParts))),
     resultConditionRate: Type.Optional(Type.Number({ minimum: 0, maximum: 5 })),
     isOpen: Type.Boolean({
       default: true
@@ -35,7 +31,12 @@ export const roomsSchema = Type.Object(
 export const roomsValidator = getValidator(roomsSchema, dataValidator)
 export const roomsResolver = resolve({
   affliction: parsePgArray,
-  resultAffliction: parsePgArray
+  resultAffliction: parsePgArray,
+  patient: virtual(async (room, context) => {
+    if (room.patient) {
+      return context.app.service('users').get(room.patient)
+    }
+  })
 })
 
 export const roomsExternalResolver = resolve({})
@@ -53,7 +54,7 @@ export const roomsDataResolver = resolve({
     if (!value) {
       return context.params?.user.id
     }
-  },
+  }
   // affliction: async (value) => value ? value : ['none']
 })
 
@@ -70,12 +71,19 @@ export const roomsPatchResolver = resolve({
     if (user && user.role === 'volunteer') {
       return user.id
     }
-  },
+  }
   // resultAffliction: async (value) => value ? value : ['none']
 })
 
 // Schema for allowed query properties
-export const roomsQueryProperties = Type.Pick(roomsSchema, ['id', 'patient', 'volunteer', 'createdAt', 'isOpen', 'isActive'])
+export const roomsQueryProperties = Type.Pick(roomsSchema, [
+  'id',
+  'patient',
+  'volunteer',
+  'createdAt',
+  'isOpen',
+  'isActive'
+])
 export const roomsQuerySchema = Type.Intersect(
   [
     querySyntax(roomsQueryProperties),
