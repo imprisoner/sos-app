@@ -2,19 +2,13 @@ import { KnexService } from '@feathersjs/knex'
 import { logger } from '../../logger.js'
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
 export class RoomsService extends KnexService {
-  async timeout(data, params) {
-    this.emit('timeout', data)
-    return data
-  }
-
   async close(data, params) {
     const { user } = params
     const { roomId } = data
 
-    const room = await this.patch(roomId, { isActive: false })
-      .catch(logger.warn)
+    const room = await this.patch(roomId, { isActive: false }).catch(logger.warn)
 
-      data = {
+    data = {
       id: user.id,
       name: user.name,
       roomId,

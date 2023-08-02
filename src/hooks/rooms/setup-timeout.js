@@ -9,7 +9,7 @@ export const setupTimeout = (context, next) => {
     }
     new Promise((resolve) => {
       setTimeout(() => {
-        resolve(context.service.timeout(data))
+        resolve(context.service.emit('timeout', data))
       }, 15000)
     })
   }
