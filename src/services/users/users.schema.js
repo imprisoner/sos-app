@@ -43,6 +43,10 @@ export const userSchema = Type.Object(
 
     avatar: Type.Optional(Type.String({
       format: "uri"
+    })),
+
+    rememberMe: Type.Optional(Type.Boolean({
+      default: false
     }))
   },
   { $id: 'User', additionalProperties: false }
