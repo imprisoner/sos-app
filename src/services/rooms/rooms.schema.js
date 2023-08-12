@@ -16,9 +16,9 @@ export const roomsSchema = Type.Object(
     volunteer: Type.Optional(Type.String({ format: 'uuid' })),
     description: Type.String({ minLength: 1 }),
     affliction: Type.Optional(Type.Array(StringEnum(enums.bodyParts))),
-    conditionRate: Type.Number({ minimum: 0, maximum: 5 }),
+    conditionRate: Type.Number({ minimum: 0, maximum: 10 }),
     resultAffliction: Type.Optional(Type.Array(StringEnum(enums.bodyParts))),
-    resultConditionRate: Type.Optional(Type.Number({ minimum: 0, maximum: 5 })),
+    resultConditionRate: Type.Optional(Type.Number({ minimum: 0, maximum: 10 })),
     isOpen: Type.Boolean({
       default: true
     }),
