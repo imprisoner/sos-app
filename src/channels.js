@@ -12,6 +12,20 @@ export const channels = () => {
     app.channel('anonymous').join(connection)
   })
 
+  app.on('disconnect', async (connection) => {
+    const {roomId, user} = connection
+
+    app.service('rooms').emit('disconnect', {
+      roomId,
+      disconnected: {
+        id: user.id,
+        name: user.name,
+        role: user.role,
+        avatar: user.avatar
+      }
+    })
+  })
+ 
   app.on('login', async (authResult, { connection }) => {
     if (!connection) {
       return
@@ -36,9 +50,9 @@ export const channels = () => {
     }
 
     const audience = app.channel(`rooms/${room.id}`).connections.map((connection) => {
-      const {id, name, role, avatar} = connection.user
+      const { id, name, role, avatar } = connection.user
 
-      return {id, name, role, avatar}
+      return { id, name, role, avatar }
     })
 
     app.channel(`rooms/${room.id}`).join(connection)
@@ -86,12 +100,17 @@ export const channels = () => {
     return app.channel(`rooms/${data.id}`)
   })
 
+  app.service('rooms').publish('disconnect', (data, context) => {
+    return app.channel(`rooms/${data.roomId}`)
+  })
+
   app.service('messages').publish('created', (data, context) => {
     return app.channel(`rooms/${data.roomId}`)
   })
 
   // eslint-disable-next-line no-unused-vars
   app.publish((data, context) => {
+    logger.info('Publishing all eventss')
     return app.channel('authenticated')
   })
 }

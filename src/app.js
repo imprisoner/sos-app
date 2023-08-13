@@ -13,7 +13,8 @@ import { authentication } from './authentication.js'
 import { services } from './services/index.js'
 import { channels } from './channels.js'
 import { mailer } from './mailer.js'
-import openapi from './openapi.js';
+import openapi from './openapi.js'
+import { onConnection } from './extensions/socketio/middleware.js'
 
 const app = koa(feathers())
 // Load our app configuration (see config/ folder)
@@ -28,7 +29,12 @@ app.configure(openapi)
 app.configure(rest())
 app.configure(mailer)
 
-app.configure(socketio())
+app.configure(
+  socketio((io) => {
+    // middlewares
+    io.use(onConnection(app))
+  })
+)
 app.configure(postgresql)
 app.configure(authentication)
 app.configure(services)
