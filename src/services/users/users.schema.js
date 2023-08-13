@@ -9,7 +9,7 @@ import { enums } from '../../constants/databaseTypes.js'
 export const userSchema = Type.Object(
   {
     id: Type.String({
-      format: "uuid"
+      format: 'uuid'
     }),
 
     email: Type.String({
@@ -23,11 +23,9 @@ export const userSchema = Type.Object(
       maxLength: 200
     }),
 
-    name: Type.String(
-      {
-        maxLength: 120,
-      }
-    ),
+    name: Type.String({
+      maxLength: 120
+    }),
 
     role: StringEnum(enums.userRole),
 
@@ -37,17 +35,23 @@ export const userSchema = Type.Object(
       default: false
     }),
 
-    emailVerificationToken: Type.Optional(Type.String({
-      maxLength: 11
-    })),
+    emailVerificationToken: Type.Optional(
+      Type.String({
+        maxLength: 11
+      })
+    ),
 
-    avatar: Type.Optional(Type.String({
-      format: "uri"
-    })),
+    avatar: Type.Optional(
+      Type.String({
+        format: 'uri'
+      })
+    ),
 
-    rememberMe: Type.Optional(Type.Boolean({
-      default: false
-    }))
+    rememberMe: Type.Optional(
+      Type.Boolean({
+        default: false
+      })
+    )
   },
   { $id: 'User', additionalProperties: false }
 )
@@ -61,9 +65,13 @@ export const userExternalResolver = resolve({
 })
 
 // Schema for creating new entries
-export const userDataSchema = Type.Pick(userSchema, ['email', 'password', 'name', 'role', 'preferredLang', 'avatar'], {
-  $id: 'UserData'
-})
+export const userDataSchema = Type.Pick(
+  userSchema,
+  ['email', 'password', 'name', 'role', 'preferredLang', 'avatar', 'rememberMe'],
+  {
+    $id: 'UserData'
+  }
+)
 export const userDataValidator = getValidator(userDataSchema, dataValidator)
 
 export const userDataResolver = resolve({
