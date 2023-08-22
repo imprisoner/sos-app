@@ -18,7 +18,7 @@ export class RoomsService extends KnexService {
     return data
   }
 
-  async type(data, params) {
+  async typing(data, params) {
     const {
       user,
       room
@@ -31,7 +31,7 @@ export class RoomsService extends KnexService {
         id: room.id
       }
     }
-    this.emit('type', data)
+    this.emit('typing', data)
     return data
   }
 }

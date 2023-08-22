@@ -12,7 +12,7 @@ import {
   roomsQueryResolver
 } from './rooms.schema.js'
 import { RoomsService, getOptions } from './rooms.class.js'
-import { roomsPath, roomsMethods } from './rooms.shared.js'
+import { roomsPath, roomsMethods, roomsEvents } from './rooms.shared.js'
 import { setupTimeout } from '../../hooks/rooms/setup-timeout.js'
 import { isRole } from '../../hooks/policies/is-role.js'
 
@@ -26,7 +26,7 @@ export const rooms = (app) => {
     // A list of all methods this service exposes externally
     methods: roomsMethods,
     // You can add additional custom events to be sent to clients here
-    events: ['join', 'timeout', 'close', 'type', 'disconnect']
+    events: roomsEvents
   })
   // Initialize hooks
   app.service(roomsPath).hooks({

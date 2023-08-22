@@ -94,7 +94,7 @@ export const channels = (app) => {
     return app.channel(`rooms/${data.room.id}`)
   })
 
-  app.service('rooms').publish('type', (data, context) => {
+  app.service('rooms').publish('typing', (data, context) => {
     return app.channel(`rooms/${data.room.id}`).filter((connection) => {
       return connection.user.id !== data.id
     })
