@@ -5,7 +5,7 @@ export const setupTimeout = (context, next) => {
 
   if (context?.data?.isActive === undefined) {
     const data = {
-      roomId: context.id
+      room: {id: context.id}
     }
     new Promise((resolve) => {
       setTimeout(() => {

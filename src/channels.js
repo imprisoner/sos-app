@@ -1,9 +1,8 @@
 import '@feathersjs/transport-commons'
 import { logger } from './logger.js'
-import { app } from './app.js'
 import { NotFound } from '@feathersjs/errors'
 
-export const channels = () => {
+export const channels = (app) => {
   logger.warn(
     'Publishing all events to all authenticated users. See `channels.js` and https://dove.feathersjs.com/api/channels.html for more information.'
   )
@@ -13,10 +12,12 @@ export const channels = () => {
   })
 
   app.on('disconnect', async (connection) => {
-    const {roomId, user} = connection
+    const {room, user} = connection
 
     app.service('rooms').emit('disconnect', {
-      roomId,
+      room: {
+        id: room.id
+      },
       disconnected: {
         id: user.id,
         name: user.name,
@@ -57,7 +58,12 @@ export const channels = () => {
 
     app.channel(`rooms/${room.id}`).join(connection)
     app.service('rooms').emit('join', {
-      roomId: room.id,
+      room: {
+        id: room.id,
+        description: room.description,
+        affliction: room.affliction,
+        conditionRate: room.conditionRate
+      },
       joined: {
         id: joinedUser.id,
         name: joinedUser.name,
@@ -71,39 +77,37 @@ export const channels = () => {
   app.service('rooms').on('close', (data, context) => {
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve(app.channel(`rooms/${data.roomId}`).leave((connection) => connection))
+        resolve(app.channel(`rooms/${data.room.id}`).leave((connection) => connection))
       }, 100)
     })
   })
 
   app.service('rooms').publish('join', (data, context) => {
-    return app.channel(`rooms/${data.roomId}`)
+    return app.channel(`rooms/${data.room.id}`)
   })
 
   app.service('rooms').publish('timeout', (data, context) => {
-    return app.channel(`rooms/${data.roomId}`).send({
-      roomId: data.roomId
-    })
+    return app.channel(`rooms/${data.room.id}`)
   })
 
   app.service('rooms').publish('close', (data, context) => {
-    return app.channel(`rooms/${data.roomId}`)
+    return app.channel(`rooms/${data.room.id}`)
   })
 
-  app.service('rooms').publish('typing', (data, context) => {
-    return app.channel(`rooms/${data.roomId}`).filter((connection) => {
+  app.service('rooms').publish('type', (data, context) => {
+    return app.channel(`rooms/${data.room.id}`).filter((connection) => {
       return connection.user.id !== data.id
     })
   })
-
+  
   app.service('rooms').publish('patched', (data, context) => {
     return app.channel(`rooms/${data.id}`)
   })
-
+  
   app.service('rooms').publish('disconnect', (data, context) => {
-    return app.channel(`rooms/${data.roomId}`)
+    return app.channel(`rooms/${data.room.id}`)
   })
-
+  
   app.service('messages').publish('created', (data, context) => {
     return app.channel(`rooms/${data.roomId}`)
   })

@@ -3,7 +3,7 @@ export const onConnection = (app) => async (socket, next) => {
     const { user } = socket.feathers
 
     const {
-      data: [{ id: roomId }]
+      data: [room]
     } = await app.service('rooms').find({
       [user.role]: user.id,
       isActive: true,
@@ -14,7 +14,7 @@ export const onConnection = (app) => async (socket, next) => {
       }
     })
 
-    socket.feathers.roomId = roomId
+    socket.feathers.room = { ...room }
     next()
   } catch (err) {
     next(err)

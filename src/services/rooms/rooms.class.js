@@ -4,8 +4,7 @@ import { logger } from '../../logger.js'
 export class RoomsService extends KnexService {
   async close(data, params) {
     const { user } = params
-    const { roomId } = data
-
+    const roomId = params.connection.room.id
     const room = await this.patch(roomId, { isActive: false }).catch(logger.warn)
 
     data = {
@@ -19,16 +18,20 @@ export class RoomsService extends KnexService {
     return data
   }
 
-  async typing(data, params) {
-    const { user } = params
+  async type(data, params) {
+    const {
+      user,
+      room
+    } = params
 
     data = {
       id: user.id,
       name: user.name,
-      roomId: data.roomId
+      room: {
+        id: room.id
+      }
     }
-
-    this.emit('typing', data)
+    this.emit('type', data)
     return data
   }
 }
