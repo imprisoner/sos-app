@@ -10,8 +10,10 @@ export class RoomsService extends KnexService {
     data = {
       id: user.id,
       name: user.name,
-      roomId,
-      isActive: room.isActive
+      room: {
+        id: room.id,
+        isActive: room.isActive
+      }
     }
 
     this.emit('close', data)
