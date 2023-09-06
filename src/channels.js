@@ -45,9 +45,20 @@ export const channels = (app) => {
     const {
       data: [room]
     } = await app.service('rooms').find({ query })
-
     if (!room) {
-      throw new NotFound(`Active room not found.`)
+      app.channel(`rooms/${connection.user.id}`).join(connection)
+      app.service('rooms').emit('disconnect', {
+        room: {
+          id: joinedUser.id
+        },
+        disconnected: {
+          id: joinedUser.id,
+          name: joinedUser.name,
+          role: joinedUser.role,
+          avatar: joinedUser.avatar
+        }
+      })
+      return
     }
 
     const audience = app.channel(`rooms/${room.id}`).connections.map((connection) => {
