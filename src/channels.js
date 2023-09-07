@@ -127,7 +127,9 @@ export const channels = (app) => {
   })
 
   app.service('rooms').publish('patched', (data, context) => {
-    return app.channel(`rooms/${data.id}`)
+    return app.channel(`rooms/${data.id}`).filter((connection) => {
+      return connection.user.role === 'volunteer'
+    })
   })
 
   app.service('rooms').publish('disconnect', (data, context) => {
