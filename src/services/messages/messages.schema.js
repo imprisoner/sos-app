@@ -42,7 +42,10 @@ export const messagesDataSchema = Type.Pick(messagesSchema, ['roomId', 'content'
 export const messagesDataValidator = getValidator(messagesDataSchema, dataValidator)
 export const messagesDataResolver = resolve({
   userId: async (_, __, { params }) => params.user.id,
-  userName: async (_, __, { params }) => params.user.name
+  userName: async (_, __, { params }) => params.user.name,
+  roomId: async (_, __, { params }) => {
+    return params.connection.room.id
+  }
 })
 
 // Schema for updating existing entries
