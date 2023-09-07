@@ -1,6 +1,6 @@
 import '@feathersjs/transport-commons'
 import { logger } from './logger.js'
-import { NotFound } from '@feathersjs/errors'
+import { NotFound, GeneralError } from '@feathersjs/errors'
 
 export const channels = (app) => {
   logger.warn(
@@ -12,7 +12,7 @@ export const channels = (app) => {
   })
 
   app.on('disconnect', async (connection) => {
-    const {room, user} = connection
+    const { room, user } = connection
 
     app.service('rooms').emit('disconnect', {
       room: {
@@ -26,7 +26,7 @@ export const channels = (app) => {
       }
     })
   })
- 
+
   app.on('login', async (authResult, { connection }) => {
     if (!connection) {
       return
@@ -45,6 +45,7 @@ export const channels = (app) => {
     const {
       data: [room]
     } = await app.service('rooms').find({ query })
+
     if (!room) {
       app.channel(`rooms/${connection.user.id}`).join(connection)
       app.service('rooms').emit('disconnect', {
@@ -67,7 +68,21 @@ export const channels = (app) => {
       return { id, name, role, avatar }
     })
 
+    //
+    const alreadyHasThisConnection = audience.some((user) => {
+      return user.id === joinedUser.id
+    })
+
+    if (alreadyHasThisConnection) {
+      logger.warn('Chat already has this connection')
+      logger.info('Audience: \n' + JSON.stringify(audience))
+      logger.info('Joined user: \n' + JSON.stringify(joinedUser))
+
+      throw new GeneralError('Chat already has this connection. See logs for details.')
+    }
+    //
     app.channel(`rooms/${room.id}`).join(connection)
+
     app.service('rooms').emit('join', {
       room: {
         id: room.id,
@@ -110,15 +125,15 @@ export const channels = (app) => {
       return connection.user.id !== data.id
     })
   })
-  
+
   app.service('rooms').publish('patched', (data, context) => {
     return app.channel(`rooms/${data.id}`)
   })
-  
+
   app.service('rooms').publish('disconnect', (data, context) => {
     return app.channel(`rooms/${data.room.id}`)
   })
-  
+
   app.service('messages').publish('created', (data, context) => {
     return app.channel(`rooms/${data.roomId}`)
   })
