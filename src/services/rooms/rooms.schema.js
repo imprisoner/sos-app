@@ -71,6 +71,15 @@ export const roomsPatchResolver = resolve({
     if (user && user.role === 'volunteer') {
       return user.id
     }
+  },
+  id: async(_, __, context) => {
+    if (context.params.provider !== 'socketio') {
+      return
+    }
+
+    const room = context.params.connection.room
+
+    return room.id
   }
   // resultAffliction: async (value) => value ? value : ['none']
 })

@@ -66,4 +66,12 @@ export const messagesQuerySchema = Type.Intersect(
   { additionalProperties: false }
 )
 export const messagesQueryValidator = getValidator(messagesQuerySchema, queryValidator)
-export const messagesQueryResolver = resolve({})
+export const messagesQueryResolver = resolve({
+  roomId: async (_, __, context) => {
+    if (context.params.provider !== 'socketio') {
+      return
+    }
+    const room = context.params.connection.room
+    return room.id
+  }
+})

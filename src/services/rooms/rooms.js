@@ -41,8 +41,23 @@ export const rooms = (app) => {
       all: [schemaHooks.validateQuery(roomsQueryValidator), schemaHooks.resolveQuery(roomsQueryResolver)],
       find: [isRole('volunteer')],
       get: [isRole('volunteer')],
-      create: [isRole('patient'), schemaHooks.validateData(roomsDataValidator), schemaHooks.resolveData(roomsDataResolver)],
-      patch: [schemaHooks.validateData(roomsPatchValidator), schemaHooks.resolveData(roomsPatchResolver), setupTimeout],
+      create: [
+        isRole('patient'),
+        schemaHooks.validateData(roomsDataValidator),
+        schemaHooks.resolveData(roomsDataResolver)
+      ],
+      patch: [
+        (context) => {
+          if (context.params.provider !== 'socketio') {
+            return
+          }
+
+          context.id = context.params.connection.room.id
+        },
+        schemaHooks.validateData(roomsPatchValidator),
+        schemaHooks.resolveData(roomsPatchResolver),
+        setupTimeout
+      ],
       remove: []
     },
     after: {
