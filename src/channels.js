@@ -8,7 +8,32 @@ export const channels = (app) => {
   )
 
   app.on('connection', (connection) => {
-    app.channel('anonymous').join(connection)
+
+    const { room, user } = connection
+
+    app.channel(`rooms/${room.id}`).join(connection)
+
+    const audience = app.channel(`rooms/${room.id}`).connections.map((connection) => {
+      const { id, name, role, avatar } = connection.user
+
+      return { id, name, role, avatar }
+    })
+
+    app.service('rooms').emit('join', {
+      room: {
+        id: room.id,
+        description: room.description,
+        affliction: room.affliction,
+        conditionRate: room.conditionRate
+      },
+      joined: {
+        id: user.id,
+        name: user.name,
+        role: user.role,
+        avatar: user.avatar
+      },
+      audience
+    })
   })
 
   app.on('disconnect', async (connection) => {
@@ -27,77 +52,10 @@ export const channels = (app) => {
     })
   })
 
-  app.on('login', async (authResult, { connection }) => {
-    if (!connection) {
+  app.on('login', async (authResult, context) => {
+    if (context.provider !== 'socketio') {
       return
     }
-
-    app.channel('anonymous').leave(connection)
-    app.channel('authenticated').join(connection)
-
-    const joinedUser = connection.user
-    const query = {
-      [joinedUser.role]: joinedUser.id,
-      isActive: true,
-      $sort: { createdAt: -1 }
-    }
-
-    const {
-      data: [room]
-    } = await app.service('rooms').find({ query })
-
-    if (!room) {
-      app.channel(`rooms/${connection.user.id}`).join(connection)
-      app.service('rooms').emit('disconnect', {
-        room: {
-          id: joinedUser.id
-        },
-        disconnected: {
-          id: joinedUser.id,
-          name: joinedUser.name,
-          role: joinedUser.role,
-          avatar: joinedUser.avatar
-        }
-      })
-      return
-    }
-
-    const audience = app.channel(`rooms/${room.id}`).connections.map((connection) => {
-      const { id, name, role, avatar } = connection.user
-
-      return { id, name, role, avatar }
-    })
-
-    //
-    const alreadyHasThisConnection = audience.some((user) => {
-      return user.id === joinedUser.id
-    })
-
-    if (alreadyHasThisConnection) {
-      logger.warn('Chat already has this connection')
-      logger.info('Audience: \n' + JSON.stringify(audience))
-      logger.info('Joined user: \n' + JSON.stringify(joinedUser))
-
-      throw new GeneralError('Chat already has this connection. See logs for details.')
-    }
-    //
-    app.channel(`rooms/${room.id}`).join(connection)
-
-    app.service('rooms').emit('join', {
-      room: {
-        id: room.id,
-        description: room.description,
-        affliction: room.affliction,
-        conditionRate: room.conditionRate
-      },
-      joined: {
-        id: joinedUser.id,
-        name: joinedUser.name,
-        role: joinedUser.role,
-        avatar: joinedUser.avatar
-      },
-      audience
-    })
   })
 
   app.service('rooms').on('close', (data, context) => {
