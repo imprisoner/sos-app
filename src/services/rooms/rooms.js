@@ -15,6 +15,7 @@ import { RoomsService, getOptions } from './rooms.class.js'
 import { roomsPath, roomsMethods, roomsEvents } from './rooms.shared.js'
 import { setupTimeout } from '../../hooks/rooms/setup-timeout.js'
 import { isRole } from '../../hooks/policies/is-role.js'
+import { logger } from '../../logger.js'
 
 export * from './rooms.class.js'
 export * from './rooms.schema.js'
@@ -42,6 +43,19 @@ export const rooms = (app) => {
       find: [isRole('volunteer')],
       get: [isRole('volunteer')],
       create: [
+        (context) => {
+          const now = new Date()
+          const userId = context.params.user.id
+          const roomId = context.params.room.id
+          const content = context.data.content
+
+          logger.info(`
+            ${now}\n
+            userId: ${userId}\n
+            roomId: ${roomId}\n
+            text: ${content} 
+          `)
+        },
         isRole('patient'),
         schemaHooks.validateData(roomsDataValidator),
         schemaHooks.resolveData(roomsDataResolver)
