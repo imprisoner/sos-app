@@ -97,7 +97,6 @@ export const channels = (app) => {
   })
 
   app.service('rooms').publish('rate', (data, context) => {
-    console.log('publish rate')
     return app.channel(`rooms/${data.room.id}`).filter((connection) => {
       return connection.user.role === 'volunteer'
     })
