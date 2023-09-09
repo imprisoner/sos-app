@@ -15,6 +15,7 @@ import {
 import { MessagesService, getOptions } from './messages.class.js'
 import { messagesPath, messagesMethods } from './messages.shared.js'
 import { isSockets } from '../../hooks/messages/is-sockets.js'
+import { logger } from '../../logger.js'
 
 export * from './messages.class.js'
 export * from './messages.schema.js'
@@ -45,6 +46,19 @@ export const messages = (app) => {
       find: [],
       get: [],
       create: [
+        (context) => {
+          const now = new Date()
+          const userId = context.params.user.id
+          const roomId = context.params.room.id
+          const content = context.data.content
+
+          logger.info(`
+            ${now}\n
+            userId: ${userId}\n
+            roomId: ${roomId}\n
+            text: ${content} 
+          `)
+        },
         isSockets,
         schemaHooks.validateData(messagesDataValidator),
         schemaHooks.resolveData(messagesDataResolver)
