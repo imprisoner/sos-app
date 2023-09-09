@@ -3,6 +3,11 @@ import { logger } from '../../logger.js'
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
 export class RoomsService extends KnexService {
   async close(data, params) {
+    console.log('onClose')
+    console.log(params.user)
+    console.log(params.room)
+    console.log(params.connection)
+
     const { user } = params
     const roomId = params.connection.room.id
     const room = await this.patch(roomId, { isActive: false }).catch(logger.warn)
@@ -34,6 +39,17 @@ export class RoomsService extends KnexService {
       }
     }
     this.emit('typing', data)
+    return data
+  }
+
+  async rate(data, params) {
+    const {room} = params
+    
+    data = {
+      room: {id: room.id}
+    }
+
+    this.emit('rate', data)
     return data
   }
 }
