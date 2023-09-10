@@ -8,7 +8,6 @@ export const channels = (app) => {
   )
 
   app.on('connection', (connection) => {
-
     const { room, user } = connection
 
     app.channel(`rooms/${room.id}`).join(connection)
@@ -50,6 +49,12 @@ export const channels = (app) => {
         avatar: user.avatar
       }
     })
+
+    const isRoomEmpty = app.channel(`rooms/${room.id}`).connections.length === 0
+
+    if (isRoomEmpty) {
+      await app.service('rooms').patch(room.id, { isActive: false }).catch(logger.warn)
+    }
   })
 
   app.on('login', async (authResult, context) => {
@@ -103,6 +108,7 @@ export const channels = (app) => {
   })
 
   app.service('messages').publish('created', (data, context) => {
+    logger.info('Connections now: ' + app.channel(`rooms/${data.roomId}`).connections.length)
     return app.channel(`rooms/${data.roomId}`)
   })
 
