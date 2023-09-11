@@ -97,7 +97,7 @@ export const channels = (app) => {
 
   app.service('rooms').publish('disconnect', (data, context) => {
     return app.channel(`rooms/${data.room.id}`).filter((connection) => {
-      return connection.user.role === 'volunteer'
+      return connection.user.id !== data.id
     })
   })
 
