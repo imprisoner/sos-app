@@ -5,7 +5,11 @@ export class MessagesService extends KnexService {}
 
 export const getOptions = (app) => {
   return {
-    paginate: app.get('paginate'),
+    // override default pagination
+    paginate: {
+      default: 5000,
+      max: 5000
+    },
     Model: app.get('postgresqlClient'),
     name: 'messages'
   }
