@@ -10,7 +10,7 @@ export const messagesSchema = Type.Object(
     userId: Type.String({ format: 'uuid' }), // foreign key
     userName: Type.String({ minLength: 1 }),
     roomId: Type.String({ format: 'uuid' }),
-    createdAt: Type.Integer(),
+    createdAt: Type.String({ format: 'date-time' }),
     content: Type.String({ minLength: 1 })
   },
   { $id: 'Messages', additionalProperties: false }

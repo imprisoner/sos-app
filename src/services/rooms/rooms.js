@@ -15,6 +15,8 @@ import { RoomsService, getOptions } from './rooms.class.js'
 import { roomsPath, roomsMethods, roomsEvents } from './rooms.shared.js'
 import { setupTimeout } from '../../hooks/rooms/setup-timeout.js'
 import { isRole } from '../../hooks/policies/is-role.js'
+import { logger } from '../../logger.js'
+import { GeneralError } from '@feathersjs/errors'
 
 export * from './rooms.class.js'
 export * from './rooms.schema.js'
@@ -61,7 +63,40 @@ export const rooms = (app) => {
       remove: []
     },
     after: {
-      all: []
+      all: [],
+      create: [
+        async (context) => {
+          const { data: deviceTokens } = await context.app.service('device-tokens').find({
+            query: {
+              userRole: 'volunteer'
+            }
+          })
+
+          console.log(deviceTokens)
+
+          const message = 'Patient needs your help'
+
+          deviceTokens.forEach(async ({ userId, endpoint }) => {
+            const response = await context.app
+              .service('aws')
+              .publish(message, endpoint)
+              .catch((err) => {
+                logger.error(err)
+                throw new GeneralError(err)
+              })
+
+            console.log(response.$metadata)
+
+            const data = {
+              message,
+              recipientId: userId,
+              awsMessageId: response.MessageId
+            }
+
+            context.app.service('notifications').create(data)
+          })
+        }
+      ]
     },
     error: {
       all: []

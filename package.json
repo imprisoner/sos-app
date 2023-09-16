@@ -45,6 +45,7 @@
     "docker:inspect": "docker inspect sos_api"
   },
   "dependencies": {
+    "@aws-sdk/client-sns": "^3.410.0",
     "@feathersjs/adapter-commons": "^5.0.6",
     "@feathersjs/authentication": "^5.0.6",
     "@feathersjs/authentication-client": "^5.0.6",

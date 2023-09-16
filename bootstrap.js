@@ -22,7 +22,7 @@ const databaseName = process.env.POSTGRES_DB
 
 async function main() {
   let db = Knex(app.get('postgresql'))
-
+  
   const { rows } = await db.raw('SELECT datname from pg_database')
   const isExists = rows.find(({ datname }) => datname === databaseName)
 
