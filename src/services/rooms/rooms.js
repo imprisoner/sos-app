@@ -66,35 +66,34 @@ export const rooms = (app) => {
       all: [],
       create: [
         async (context) => {
-          const { data: deviceTokens } = await context.app.service('device-tokens').find({
+          const { data } = await context.app.service('device-tokens').find({
             query: {
               userRole: 'volunteer'
             }
           })
 
-          console.log(deviceTokens)
+          const message = {
+            title: 'SOS',
+            body: `${context.params.user.name} needs your help!`
+          }
 
-          const message = 'Patient needs your help'
+          const payload = {
+            patientId: context.params.user.id,
+            patientName: context.params.user.name,
+            roomId: context.result.id
+          }
 
-          deviceTokens.forEach(async ({ userId, endpoint }) => {
-            const response = await context.app
-              .service('aws')
-              .publish(message, endpoint)
-              .catch((err) => {
-                logger.error(err)
-                throw new GeneralError(err)
-              })
-
-            console.log(response.$metadata)
-
-            const data = {
+          const response = await context.app
+            .service('firebase')
+            .publish({
+              payload,
               message,
-              recipientId: userId,
-              awsMessageId: response.MessageId
-            }
-
-            context.app.service('notifications').create(data)
-          })
+              tokens: data.map((item) => item.token)
+            })
+            .catch((err) => {
+              logger.error(err)
+              throw new GeneralError(err)
+            })
         }
       ]
     },

@@ -10,7 +10,7 @@ export async function up(knex) {
     table.timestamp('createdAt').defaultTo(knex.fn.now())
     table.timestamp('updatedAt').defaultTo(knex.fn.now())
     table.string('device')
-    table.string('endpoint')
+    table.enu('platform', ['android', 'ios'])
     table.uuid('userId')
     table.foreign('userId').references('id').inTable('users')
     table.enu('userRole', ['patient', 'volunteer'])

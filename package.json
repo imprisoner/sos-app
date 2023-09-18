@@ -45,7 +45,6 @@
     "docker:inspect": "docker inspect sos_api"
   },
   "dependencies": {
-    "@aws-sdk/client-sns": "^3.410.0",
     "@feathersjs/adapter-commons": "^5.0.6",
     "@feathersjs/authentication": "^5.0.6",
     "@feathersjs/authentication-client": "^5.0.6",
@@ -66,6 +65,7 @@
     "dotenv": "^16.3.1",
     "feathers-mailer": "^4.1.1",
     "feathers-swagger": "^3.0.0",
+    "firebase-admin": "^11.10.1",
     "knex": "^2.5.1",
     "koa-mount": "^4.0.0",
     "koa-send": "^5.0.1",

@@ -25,3 +25,5 @@ lib-cov
 .env.development
 .env.production
 sql
+
+config/sos-luden-labs-firebase-adminsdk-k1ro3-f04665e5f8.json

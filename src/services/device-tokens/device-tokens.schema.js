@@ -13,7 +13,7 @@ export const deviceTokensSchema = Type.Object(
     createdAt: Type.String({ format: 'date-time' }),
     updatedAt: Type.String({ format: 'date-time' }),
     device: Type.String(),
-    endpoint: Type.String(),
+    platform: StringEnum(['android', 'ios']),
     userId: Type.String({
       format: 'uuid'
     }),
@@ -34,12 +34,7 @@ export const deviceTokensDataValidator = getValidator(deviceTokensDataSchema, da
 export const deviceTokensDataResolver = resolve({
   userId: async (_, __, { params }) => params.user.id,
   userRole: async (_, __, { params }) => {
-    console.log(params.user)
     return params.user.role
-  },
-  endpoint: async (_, data, { app, params }) => {
-    const endpoint = await app.service('aws').createEndpoint(data.token, params.user.id)
-    return endpoint
   }
 })
 

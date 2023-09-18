@@ -9,8 +9,8 @@ export const notificationsSchema = Type.Object(
     id: Type.String({ format: 'uuid' }),
     createdAt: Type.String({ format: 'date-time' }),
     updatedAt: Type.String({ format: 'date-time' }),
-    message: Type.String(),
-    awsMessageId: Type.String(),
+    topic: Type.String(),
+    messageId: Type.String(),
     recipientId: Type.String({ format: 'uuid' })
   },
   { $id: 'Notifications', additionalProperties: false }

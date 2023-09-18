@@ -6,7 +6,7 @@ import { messages } from './messages/messages.js'
 import { rooms } from './rooms/rooms.js'
 import { forgotPassword } from './forgot-password/forgotPassword.js'
 import { user } from './users/users.js'
-import { aws } from './aws/aws.js'
+import { firebase } from './firebase/firebase.js'
 
 export const services = (app) => {
   app.configure(notifications)
@@ -17,5 +17,5 @@ export const services = (app) => {
   app.configure(messages)
   app.configure(rooms)
   app.configure(deviceTokens)
-  app.configure(aws)
+  app.configure(firebase)
 }
