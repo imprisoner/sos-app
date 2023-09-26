@@ -14,6 +14,7 @@ export const deviceTokensSchema = Type.Object(
     updatedAt: Type.String({ format: 'date-time' }),
     device: Type.String(),
     platform: StringEnum(['android', 'ios']),
+    osVersion: Type.String(),
     userId: Type.String({
       format: 'uuid'
     }),
@@ -27,7 +28,7 @@ export const deviceTokensResolver = resolve({})
 export const deviceTokensExternalResolver = resolve({})
 
 // Schema for creating new entries
-export const deviceTokensDataSchema = Type.Pick(deviceTokensSchema, ['token', 'device'], {
+export const deviceTokensDataSchema = Type.Pick(deviceTokensSchema, ['token', 'device', 'platform', 'osVersion'], {
   $id: 'DeviceTokensData'
 })
 export const deviceTokensDataValidator = getValidator(deviceTokensDataSchema, dataValidator)

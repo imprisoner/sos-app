@@ -114,7 +114,7 @@ export const channels = (app) => {
 
   // eslint-disable-next-line no-unused-vars
   app.publish((data, context) => {
-    logger.info('Publishing all eventss')
+    logger.info('Publishing all events')
     return app.channel('authenticated')
   })
 }

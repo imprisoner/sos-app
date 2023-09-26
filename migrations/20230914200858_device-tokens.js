@@ -11,6 +11,7 @@ export async function up(knex) {
     table.timestamp('updatedAt').defaultTo(knex.fn.now())
     table.string('device')
     table.enu('platform', ['android', 'ios'])
+    table.string('osVersion')
     table.uuid('userId')
     table.foreign('userId').references('id').inTable('users')
     table.enu('userRole', ['patient', 'volunteer'])
