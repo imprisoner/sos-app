@@ -1,12 +1,11 @@
 import { notifications } from './notifications/notifications.js'
-
 import { deviceTokens } from './device-tokens/device-tokens.js'
-
 import { messages } from './messages/messages.js'
 import { rooms } from './rooms/rooms.js'
 import { forgotPassword } from './forgot-password/forgotPassword.js'
 import { user } from './users/users.js'
 import { firebase } from './firebase/firebase.js'
+import { appVersion } from './app-version/app-version.js'
 
 export const services = (app) => {
   app.configure(notifications)
@@ -17,5 +16,7 @@ export const services = (app) => {
   app.configure(messages)
   app.configure(rooms)
   app.configure(deviceTokens)
+  app.configure(notifications)
   app.configure(firebase)
+  app.configure(appVersion)
 }
