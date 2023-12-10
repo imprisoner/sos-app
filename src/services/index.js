@@ -7,6 +7,7 @@ import { rooms } from './rooms/rooms.js'
 import { forgotPassword } from './forgot-password/forgotPassword.js'
 import { user } from './users/users.js'
 import { firebase } from './firebase/firebase.js'
+import { upload } from './upload/upload.js'
 
 export const services = (app) => {
   app.configure(notifications)
@@ -18,4 +19,5 @@ export const services = (app) => {
   app.configure(rooms)
   app.configure(deviceTokens)
   app.configure(firebase)
+  app.configure(upload)
 }

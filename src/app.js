@@ -1,7 +1,7 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html
 import { feathers } from '@feathersjs/feathers'
 import configuration from '@feathersjs/configuration'
-import { koa, rest, bodyParser, errorHandler, parseAuthentication } from '@feathersjs/koa'
+import { koa, rest, bodyParser, errorHandler, parseAuthentication, serveStatic } from '@feathersjs/koa'
 import socketio from '@feathersjs/socketio'
 
 import { configurationValidator } from './configuration.js'
@@ -24,6 +24,7 @@ app.configure(configuration(configurationValidator))
 app.use(errorHandler())
 app.use(parseAuthentication())
 app.use(bodyParser())
+app.use(serveStatic('public/uploads'))
 // Configure services and transports
 app.configure(openapi)
 app.configure(rest())

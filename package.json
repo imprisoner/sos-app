@@ -59,6 +59,7 @@
     "@feathersjs/socketio": "^5.0.6",
     "@feathersjs/transport-commons": "^5.0.6",
     "@feathersjs/typebox": "^5.0.6",
+    "@koa/multer": "^3.0.2",
     "@koa/router": "^12.0.0",
     "@mairu/swagger-ui-apikey-auth-form": "^1.2.1",
     "@types/lodash": "^4.14.197",
@@ -70,6 +71,7 @@
     "koa-mount": "^4.0.0",
     "koa-send": "^5.0.1",
     "koa-static": "^5.0.0",
+    "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.3",
     "pg": "^8.11.0",
     "shortid": "^2.2.16",
@@ -80,6 +82,7 @@
   "devDependencies": {
     "@feathersjs/cli": "^5.0.6",
     "@feathersjs/rest-client": "^5.0.6",
+    "@types/koa-multer": "^1.0.4",
     "axios": "^1.4.0",
     "cross-env": "^7.0.3",
     "mocha": "^10.2.0",
