@@ -1,11 +1,9 @@
 import { KnexService } from '@feathersjs/knex'
-import { Type } from "@feathersjs/typebox/lib/index.js";
-import { logger } from '../../logger.js';
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
 class AppVersionService extends KnexService {
   async find(params) {
     if (params.query.latest) {
-      return super.find({
+      const { data } = await super.find({
         query: {
           $limit: 1,
           $sort: {
@@ -13,6 +11,8 @@ class AppVersionService extends KnexService {
           }
         }
       })
+
+      return { version: data[0].version }
     }
 
     return super.find(params)
