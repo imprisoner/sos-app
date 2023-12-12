@@ -44,3 +44,38 @@ For more information on all the things you can do with Feathers visit [docs.feat
 ## Swagger-UI
 
 Swagger is available at ```/docs``` path
+
+## Запустить в докере для разработки
+
+Переключиться на ветку `develop`
+
+```
+$ git switch develop
+```
+
+В корне должен лежать `.env` файл.
+
+В папке `./config` должен лежать файл конфигурации `firebase`
+
+Также вручную создать в проекте папку `/public/uploads/avatars`
+
+```
+$ docker compose -f docker-compose.development.yml --env-file .env up -d --build
+```
+
+После билда и запуска контейнера нужно вручную создать базу данных с соответствующим `.env` именем и паролем, а также выполнить миграции изнутри самого контейнера
+
+```
+$ docker exec -it sos_api bash
+/usr/src/app# npm run migrate
+```
+
+Для большинства запросов требуется токен авторизации.
+
+Для этого нужно выпонить следующие запросы из коллекции `Postman`:
+
+`/Registration Service/signup` - зарегистрировать аккаунт
+
+`/Positive Flow Consequence/patient login` - залогиниться
+
+В регистрации уже есть нужный объект в теле запроса, нужно только подставить значения в соответствующие переменные. Токен автоматически подкинется в заголовок остальных запросов.
