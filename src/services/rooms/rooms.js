@@ -72,6 +72,12 @@ export const rooms = (app) => {
             }
           })
 
+          const tokens = data.filter((item) => item.token).map((item) => item.token)
+
+          if(!data.length) {
+            return
+          }
+
           const message = {
             title: 'SOS',
             body: `${context.params.user.name} needs your help!`
@@ -83,12 +89,12 @@ export const rooms = (app) => {
             roomId: context.result.id
           }
 
-          const response = await context.app
+          await context.app
             .service('firebase')
             .publish({
               payload,
               message,
-              tokens: data.map((item) => item.token)
+              tokens
             })
             .catch((err) => {
               logger.error(err)
