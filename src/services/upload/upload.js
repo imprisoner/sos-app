@@ -23,7 +23,6 @@ export * from './upload.schema.js'
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    console.log(req.body.scope)
     cb(null, 'public/uploads/' + req.body.scope)
   },
   filename: function (req, file, cb) {
@@ -44,7 +43,10 @@ export const upload = (app) => {
     events: [],
     koa: {
       before: [
-        koaUpload.single('file'),
+        async (ctx, next) => {
+          console.log(ctx)
+          return koaUpload.single('file')(ctx, next)
+        },
         async (ctx, next) => {
           ctx.feathers = {
             ...ctx.feathers, 

@@ -23,9 +23,7 @@ export const UserCustomService = {
     })
 
     return {id, emailVerified, message: "Email has been succesfully verified"}
-  }),
-
-  
+  })
 }
 
 export const getOptions = (app) => {
