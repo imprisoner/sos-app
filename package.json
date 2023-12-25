@@ -44,6 +44,15 @@
     "docker:logs": "docker-compose -H \"ssh://ubuntu@sos.luden-labs.com\" logs -f",
     "docker:inspect": "docker inspect sos_api"
   },
+  "imports": {
+    "#src/*": "./src/*",
+    "#services/*": "./src/services/*",
+    "#extensions/*": "./src/extensions/*",
+    "#helpers/*": "./src/helpers/*",
+    "#hooks/*": "./src/hooks/*",
+    "#errors/*": "./src/errors/*",
+    "#constants/*": "./src/constants/*"
+  },
   "dependencies": {
     "@feathersjs/adapter-commons": "^5.0.6",
     "@feathersjs/authentication": "^5.0.6",
