@@ -24,7 +24,7 @@ app.configure(configuration(configurationValidator))
 app.use(errorHandler())
 app.use(parseAuthentication())
 app.use(bodyParser())
-app.use(serveStatic('public/uploads'))
+
 // Configure services and transports
 app.configure(openapi)
 app.configure(rest())

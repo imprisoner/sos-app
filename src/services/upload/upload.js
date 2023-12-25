@@ -1,4 +1,5 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
+import fileUploader from '#extensions/multer/index.js'
 import { authenticate } from '@feathersjs/authentication'
 
 import { hooks as schemaHooks } from '@feathersjs/schema'
@@ -15,23 +16,8 @@ import {
 import { UploadService, getOptions } from './upload.class.js'
 import { uploadPath, uploadMethods } from './upload.shared.js'
 
-import multer from 'multer'
-import koaMulter from '@koa/multer'
-
 export * from './upload.class.js'
 export * from './upload.schema.js'
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'public/uploads/' + req.body.scope)
-  },
-  filename: function (req, file, cb) {
-    const suffix = Date.now() + Math.round(Math.random() * 1E9)
-    cb(null, file.fieldname + '-' + suffix + '.' + file.mimetype.split('/')[1])
-  }
-})
-
-const koaUpload = koaMulter({ storage })
 
 // A configure function that registers the service and its hooks via `app.configure`
 export const upload = (app) => {
@@ -43,13 +29,10 @@ export const upload = (app) => {
     events: [],
     koa: {
       before: [
-        async (ctx, next) => {
-          console.log(ctx)
-          return koaUpload.single('file')(ctx, next)
-        },
+        fileUploader.single('file'),
         async (ctx, next) => {
           ctx.feathers = {
-            ...ctx.feathers, 
+            ...ctx.feathers,
             file: ctx.file
           }
 

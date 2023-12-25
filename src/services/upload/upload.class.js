@@ -1,14 +1,15 @@
 import { KnexService } from '@feathersjs/knex'
-
+import path from 'node:path/posix'
+import { app } from '../../app.js'
 export class UploadService extends KnexService {
   async create(data, params) {
-    // TODO
-    const host = 'https://stage.sos.luden-labs.com'
-    const staticPath = '/static'
+    const host = app.get('origins')[1] || ''
+    const staticPath = app.get('staticPath') || '' 
 
     data = {
-      path: host + staticPath + '/' + data.scope + '/' + params.file.filename
+      path: path.join(host, staticPath, data.scope, params.file.filename)
     }
+
     return data
   }
 }
