@@ -11,7 +11,8 @@ export const messagesSchema = Type.Object(
     userName: Type.String({ minLength: 1 }),
     roomId: Type.String({ format: 'uuid' }),
     createdAt: Type.String({ format: 'date-time' }),
-    content: Type.String({ minLength: 1 })
+    content: Type.Optional(Type.String({ minLength: 1 })),
+    imageUrl: Type.Optional(Type.String({format: 'uri'}))
   },
   { $id: 'Messages', additionalProperties: false }
 )
@@ -35,7 +36,7 @@ export const messagesResolver = resolve({
 export const messagesExternalResolver = resolve({})
 
 // Schema for creating new entries
-export const messagesDataSchema = Type.Pick(messagesSchema, ['roomId', 'content'], {
+export const messagesDataSchema = Type.Pick(messagesSchema, ['roomId', 'content', 'imageUrl'], {
   $id: 'MessagesData'
 })
 
