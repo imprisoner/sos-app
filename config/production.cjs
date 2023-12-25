@@ -2,8 +2,11 @@ module.exports = {
   host: process.env.APP_HOST,
   port: Number(process.env.APP_PORT),
   public: './public/',
+  uploadsDir: './public/uploads/',
+  staticPath: process.env.STATIC_PATH,
   origins: [
-    '*'
+    '*',
+    process.env.API_URL
   ],
   paginate: {
     default: 10,
