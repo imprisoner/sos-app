@@ -25,9 +25,9 @@ export const onConnection = (app) => async (socket, next) => {
     const alreadyHasThisConnection = app.channel(`rooms/${room.id}`).connections.some((connection) => {
       return connection.user.id === user.id
     })
-
+    
     if (alreadyHasThisConnection) {
-      throw new TooManyRequests('Duplicated socketio connection')
+      app.channel.leave((connection) => connection.user.id === user.id)
     }
 
     next()
