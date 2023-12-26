@@ -27,7 +27,7 @@ export const onConnection = (app) => async (socket, next) => {
     })
     
     if (alreadyHasThisConnection) {
-      app.channel.leave((connection) => connection.user.id === user.id)
+      app.channel(`rooms/${room.id}`).leave((connection) => connection.user.id === user.id)
     }
 
     next()
