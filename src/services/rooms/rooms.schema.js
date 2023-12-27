@@ -99,7 +99,7 @@ export const roomsQuerySchema = Type.Intersect(
     // Add additional query properties here
     Type.Object({}, { additionalProperties: false })
   ],
-  { additionalProperties: false }
+  { additionalProperties: true }
 )
 export const roomsQueryValidator = getValidator(roomsQuerySchema, queryValidator)
 export const roomsQueryResolver = resolve({})

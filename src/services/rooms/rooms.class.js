@@ -1,7 +1,16 @@
 import { KnexService } from '@feathersjs/knex'
 import { logger } from '../../logger.js'
+import { app } from '#src/app.js'
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
 export class RoomsService extends KnexService {
+  async find(params) {
+    if(params.query.audience) {
+      return this.getRoomAudience(null, params)
+    }
+
+    return super.find(params)
+  }
+
   async close(data, params) {
 
     const { user } = params
@@ -39,14 +48,36 @@ export class RoomsService extends KnexService {
   }
 
   async rate(data, params) {
-    const {room} = params
-    
+    const { room } = params
+
     data = {
-      room: {id: room.id}
+      room: { id: room.id }
     }
 
     this.emit('rate', data)
     return data
+  }
+
+  async getRoomAudience(_, params) {
+    const { user } = params
+
+    const query = {
+      [user.role]: user.id,
+      isActive: true,
+      $sort: {
+        createdAt: -1
+      }
+    }
+
+    const { data: [room] } = await this.find({ query })
+
+    const audience = app.channel(`rooms/${room.id}`).connections.map((connection) => {
+      const { id, name, role, avatar } = connection.user
+
+      return { id, name, role, avatar }
+    })
+
+    return { audience }
   }
 }
 

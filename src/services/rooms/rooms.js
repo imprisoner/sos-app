@@ -41,8 +41,8 @@ export const rooms = (app) => {
     },
     before: {
       all: [schemaHooks.validateQuery(roomsQueryValidator), schemaHooks.resolveQuery(roomsQueryResolver)],
-      find: [isRole('volunteer')],
-      get: [isRole('volunteer')],
+      find: [],
+      get: [],
       create: [
         isRole('patient'),
         schemaHooks.validateData(roomsDataValidator),
