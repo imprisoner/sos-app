@@ -1,6 +1,7 @@
 import { KnexService } from '@feathersjs/knex'
 import { logger } from '../../logger.js'
 import { app } from '#src/app.js'
+import { NotFound } from '@feathersjs/errors'
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
 export class RoomsService extends KnexService {
   async find(params) {
@@ -70,6 +71,11 @@ export class RoomsService extends KnexService {
     }
 
     const { data: [room] } = await this.find({ query })
+
+
+    if (!room) {
+      return { audience: [] }
+    }
 
     const audience = app.channel(`rooms/${room.id}`).connections.map((connection) => {
       const { id, name, role, avatar } = connection.user
