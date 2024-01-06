@@ -3,6 +3,8 @@ import { AuthenticationService } from './extensions/AuthenticationService.js'
 import { JWTStrategy } from '@feathersjs/authentication'
 import { LocalStrategy } from '@feathersjs/authentication-local'
 import { hooks as schemaHooks, resolve } from '@feathersjs/schema'
+import { GoogleStrategy } from './extensions/custom-strategies/google.js'
+import { oauth } from '@feathersjs/authentication-oauth'
 
 export const authentication = (app) => {
   const authentication = new AuthenticationService(app)
@@ -61,9 +63,11 @@ export const authentication = (app) => {
 
   authentication.register('jwt', new JWTStrategy())
   authentication.register('local', new LocalStrategy())
+  authentication.register('google', new GoogleStrategy())
 
   app.use('authentication', authentication)
-
+  app.configure(oauth({ linkStrategy: "jwt" }))
+  
   app.service('authentication').hooks({
     around: {
       // prevent showing authentication payload in response

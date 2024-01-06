@@ -34,8 +34,6 @@ export * from './users.schema.js'
 
 // A configure function that registers the service and its hooks via `app.configure`
 export const user = (app) => {
-  
-
   // Register our service on the Feathers application
   app.use(userPath, new UserService(getOptions(app)), {
     // A list of all methods this service exposes externally

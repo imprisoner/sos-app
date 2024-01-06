@@ -7,6 +7,7 @@ import { user } from './users/users.js'
 import { firebase } from './firebase/firebase.js'
 import { upload } from './upload/upload.js'
 import { appVersion } from './app-version/app-version.js'
+import { accountProvider } from './account-providers/account-providers.js'
 
 export const services = (app) => {
   // All services will be registered here
@@ -19,4 +20,5 @@ export const services = (app) => {
   app.configure(firebase)
   app.configure(upload)
   app.configure(appVersion)
+  app.configure(accountProvider)
 }
