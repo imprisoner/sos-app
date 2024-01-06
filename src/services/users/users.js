@@ -18,8 +18,7 @@ import {
 import { UserService, UserCustomService, getOptions } from './users.class.js'
 
 import { checkEmailPresence } from '../../hooks/check-email-presence.js'
-import { sendVerificationEmail } from '../../hooks/users/send-verification-email.js'
-import { setupEmailVerification } from '../../hooks/users/setupEmailVerification.js'
+import { emailVerificationHook } from '#hooks/users/email-verification-hook.js'
 
 import swagger from 'feathers-swagger';
 import { validateVerificationToken } from '../../hooks/users/validate-verification-token.js'
@@ -59,7 +58,7 @@ export const user = (app) => {
       all: [schemaHooks.resolveExternal(userExternalResolver), schemaHooks.resolveResult(userResolver)],
       find: [authenticate('jwt')],
       get: [authenticate('jwt')],
-      create: [],
+      create: [emailVerificationHook],
       update: [authenticate('jwt')],
       patch: [authenticate('jwt')],
       remove: [authenticate('jwt')],
@@ -70,21 +69,18 @@ export const user = (app) => {
       find: [],
       get: [],
       create: [
-        schemaHooks.validateData(userDataValidator),
-        schemaHooks.resolveData(userDataResolver),
         checkEmailPresence,
         approveCreation,
-        setupEmailVerification
+        schemaHooks.validateData(userDataValidator),
+        schemaHooks.resolveData(userDataResolver),
       ],
       patch: [schemaHooks.validateData(userPatchValidator), schemaHooks.resolveData(userPatchResolver)],
       remove: [],
-      
+
     },
     after: {
       all: [],
-      create: [
-        sendVerificationEmail
-      ]
+      create: []
     },
     error: {
       all: []
