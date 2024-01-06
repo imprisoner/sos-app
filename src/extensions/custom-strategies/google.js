@@ -13,8 +13,7 @@ export class GoogleStrategy extends OAuthStrategy {
 
   async verify(data) {
     const ticket = await client.verifyIdToken({
-      idToken: data.accessToken,
-      audience: data.client_id
+      idToken: data.accessToken
     });
 
     const payload = ticket.getPayload();
@@ -32,6 +31,7 @@ export class GoogleStrategy extends OAuthStrategy {
       name: profile.given_name + ' ' + profile.family_name,
       role: profile.role,
       rememberMe: true,
+      emailVerified: true,
       preferredLang
     };
   }

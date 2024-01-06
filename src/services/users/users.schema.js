@@ -18,10 +18,10 @@ export const userSchema = Type.Object(
       maxLength: 200
     }),
 
-    password: Type.Optional(Type.String({
+    password: Type.String({
       minLength: 8,
       maxLength: 200
-    })),
+    }),
 
     name: Type.String({
       maxLength: 120
@@ -67,7 +67,17 @@ export const userExternalResolver = resolve({
 // Schema for creating new entries
 export const userDataSchema = Type.Pick(
   userSchema,
-  ['email', 'password', 'name', 'role', 'preferredLang', 'avatar', 'rememberMe'],
+  [
+    'email', 
+    'password', 
+    'name', 
+    'role', 
+    'preferredLang', 
+    'avatar', 
+    'rememberMe', 
+    'emailVerified', 
+    'emailVerificationToken'
+  ],
   {
     $id: 'UserData'
   }
