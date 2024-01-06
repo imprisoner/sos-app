@@ -34,7 +34,8 @@ module.exports = {
     secret: process.env.JWT_SECRET,
     authStrategies: [
       'jwt',
-      'local'
+      'local',
+      'google'
     ],
     jwtOptions: {
       header: {
@@ -47,6 +48,13 @@ module.exports = {
     local: {
       usernameField: 'email',
       passwordField: 'password'
+    },
+    oauth: {
+      google: {
+        key: process.env.GOOGLE_CLIENT_ID,
+        secret: process.env.GOOGLE_CLIENT_SECRET,
+        scope: ["email", "openid"]
+      }
     }
   },
   mailer: {

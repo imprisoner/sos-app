@@ -18,10 +18,10 @@ export const userSchema = Type.Object(
       maxLength: 200
     }),
 
-    password: Type.String({
+    password: Type.Optional(Type.String({
       minLength: 8,
       maxLength: 200
-    }),
+    })),
 
     name: Type.String({
       maxLength: 120
