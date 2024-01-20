@@ -1,0 +1,84 @@
+export const actions = [
+  { id: 1, text: 'Count down from 100 to 0 in increments of 7 each time.', color: 'purple', highlight: null },
+  { id: 2, text: 'Place bare feet on the floor', color: 'purple', highlight: null },
+  {
+    id: 3,
+    text: 'Breathe with me: deep breath for a count of 4, another deep breath for a count of 2, long exhale. And another one, and another one.',
+    color: 'purple', highlight: null
+  },
+  { id: 4, text: 'Can you take a glass of cold water or ask someone to bring it to you?', color: 'purple', highlight: null },
+  { id: 5, text: 'Can you hold an ice cube, or ask someone to bring it to you?', color: 'purple', highlight: null },
+  { id: 6, text: 'Lie on the bed and close your eyes, Im here with you', color: 'purple', highlight: null },
+  { id: 7, text: 'Self Hug: Hug your shoulders with your hands for a few seconds.', color: 'purple', highlight: null },
+  { id: 8, text: 'Place your hands on your thighs and gently tap them alternately: right, left, right, left.', color: 'purple', highlight: null },
+  { id: 9, text: 'Touch 3 objects around you', color: 'purple', highlight: null },
+  { id: 10, text: 'Describe the place you are in right now.', color: 'purple', highlight: null },
+]
+export const questions = [
+  {id: 1, text: 'Where do you feel the pain in your body?', color: 'blueDeep', highlight: null},
+  {
+    id: 2,
+    text: 'What does this pain feel like? is it burning? Is it stabbing? is it presses?',
+    color: 'blueDeep', highlight: null
+  },
+  {id: 4, text: 'How much does it hurt you?', color: 'blueDeep', highlight: null},
+  {id: 5, text: 'How many red colored objects are there around you?', color: 'blueDeep', highlight: null},
+  {id: 6, text: 'What objects do you see around you now?', color: 'blueDeep', highlight: null},
+  {id: 7, text: 'How many letters are in your full name?', color: 'blueDeep', highlight: null},
+  {id: 8, text: 'What day is today?', color: 'blueDeep', highlight: null},
+  {id: 9, text: 'What voices do you hear around you?', color: 'blueDeep', highlight: null},
+]
+export const sentences = [
+  {id: 1, text: 'You are not alone, I am with you', color: 'greenMedium', highlight: null},
+  {id: 2, text: 'I see that you are in pain, it will soon be over', color: 'greenMedium', highlight: null},
+  {id: 4, text: 'I see this wave is hard, I\'m here with you', color: 'greenMedium', highlight: null},
+  {id: 5, text: 'You are doing great', color: 'greenMedium', highlight: null},
+  {id: 6, text: 'I see that the wave has calmed down a bit', color: 'greenMedium', highlight: null},
+  {id: 7, text: 'You are a hero and strong and you will get through this', color: 'greenMedium', highlight: null},
+  {id: 8, text: 'This is almost the end of the wave, it will soon be over', color: 'greenMedium', highlight: null},
+  {id: 9, text: 'Your body is relaxing itself', color: 'greenMedium', highlight: null},
+]
+
+export const ACTIONS = {
+  letter: 'a',
+  lastItemId: 10,
+  data: actions
+}
+
+export const SENTENCES = {
+  letter: 's',
+  lastItemId: 9,
+  data: sentences
+}
+
+export const QUESTIONS = {
+  letter: 'a',
+  lastItemId: 9,
+  data: questions
+}
+
+// для фронта
+
+export const TOOLBOX = [
+  {
+      id: 1,
+      name: 'Actions',
+      img: 'action',
+      color: 'purple',
+      data: ACTIONS.data
+  },
+  {
+      id: 2,
+      name: 'Questions',
+      img: 'question',
+      color: 'blueDeep',
+      data: QUESTIONS.data
+  },
+  {
+      id: 3,
+      name: 'Sentences',
+      img: 'sentences',
+      color: 'greenMedium',
+      data: SENTENCES.data
+  },
+]

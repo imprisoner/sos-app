@@ -1,6 +1,6 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { authenticate } from '@feathersjs/authentication'
-
+import { Unprocessable } from '@feathersjs/errors'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import {
   messagesDataValidator,
@@ -16,6 +16,7 @@ import { MessagesService, getOptions } from './messages.class.js'
 import { messagesPath, messagesMethods } from './messages.shared.js'
 import { isSockets } from '../../hooks/messages/is-sockets.js'
 import { logger } from '../../logger.js'
+import { isValidToolString } from '#src/helpers/parseToolboxString.js'
 
 export * from './messages.class.js'
 export * from './messages.schema.js'
@@ -46,6 +47,13 @@ export const messages = (app) => {
       find: [],
       get: [],
       create: [
+        (context) => {
+          const { tool } = context.data
+
+          if (tool && !isValidToolString(tool)) {
+            throw new Unprocessable('Unprocessable entity', { tool })
+          }
+        },
         (context) => {
           const now = new Date()
           const userId = context.params.user.id

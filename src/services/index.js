@@ -1,3 +1,5 @@
+import { toolbox } from './toolbox/toolbox.js'
+
 import { notifications } from './notifications/notifications.js'
 import { deviceTokens } from './device-tokens/device-tokens.js'
 import { messages } from './messages/messages.js'
@@ -10,6 +12,8 @@ import { appVersion } from './app-version/app-version.js'
 import { accountProvider } from './account-providers/account-providers.js'
 
 export const services = (app) => {
+  app.configure(toolbox)
+
   // All services will be registered here
   app.configure(user)
   app.configure(forgotPassword)

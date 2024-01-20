@@ -1,7 +1,8 @@
 // // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import { resolve, virtual } from '@feathersjs/schema'
 import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
-import { dataValidator, queryValidator } from '../../validators.js'
+import { dataValidator, queryValidator } from '#src/validators.js'
+import { parseTool } from '#src/helpers/parseToolboxString.js'
 
 // Main data model schema
 export const messagesSchema = Type.Object(
@@ -12,7 +13,8 @@ export const messagesSchema = Type.Object(
     roomId: Type.String({ format: 'uuid' }),
     createdAt: Type.String({ format: 'date-time' }),
     content: Type.Optional(Type.String({ minLength: 1 })),
-    imageUrl: Type.Optional(Type.String({format: 'uri'}))
+    imageUrl: Type.Optional(Type.String({format: 'uri'})),
+    tool: Type.Optional(Type.String({ maxLength: 3 }))
   },
   { $id: 'Messages', additionalProperties: false }
 )
@@ -30,13 +32,16 @@ export const messagesResolver = resolve({
       id: data.userId,
       name: data.userName
     }
-  })
+  }),
+  tool: (value) => {
+    return parseTool(value)
+  }
 })
 
 export const messagesExternalResolver = resolve({})
 
 // Schema for creating new entries
-export const messagesDataSchema = Type.Pick(messagesSchema, ['roomId', 'content', 'imageUrl'], {
+export const messagesDataSchema = Type.Pick(messagesSchema, ['roomId', 'content', 'imageUrl', 'tool'], {
   $id: 'MessagesData'
 })
 
