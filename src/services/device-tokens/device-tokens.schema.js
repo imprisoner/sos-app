@@ -47,7 +47,7 @@ export const deviceTokensPatchValidator = getValidator(deviceTokensPatchSchema, 
 export const deviceTokensPatchResolver = resolve({})
 
 // Schema for allowed query properties
-export const deviceTokensQueryProperties = Type.Pick(deviceTokensSchema, ['userRole'])
+export const deviceTokensQueryProperties = Type.Pick(deviceTokensSchema, ['userRole', 'userId'])
 export const deviceTokensQuerySchema = Type.Intersect(
   [
     querySyntax(deviceTokensQueryProperties),
