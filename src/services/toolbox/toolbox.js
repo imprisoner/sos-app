@@ -32,8 +32,8 @@ export const toolbox = (app) => {
     around: {
       all: [
         authenticate('jwt'),
-        schemaHooks.resolveExternal(toolboxExternalResolver),
-        schemaHooks.resolveResult(toolboxResolver)
+        // schemaHooks.resolveExternal(toolboxExternalResolver),
+        // schemaHooks.resolveResult(toolboxResolver)
       ]
     },
     before: {

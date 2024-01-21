@@ -16,7 +16,7 @@ import { MessagesService, getOptions } from './messages.class.js'
 import { messagesPath, messagesMethods } from './messages.shared.js'
 import { isSockets } from '../../hooks/messages/is-sockets.js'
 import { logger } from '../../logger.js'
-import { isValidToolString } from '#src/helpers/parseToolboxString.js'
+import { isValidToolString } from '#src/helpers/toolbox.utils.js'
 
 export * from './messages.class.js'
 export * from './messages.schema.js'

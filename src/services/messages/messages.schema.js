@@ -2,7 +2,7 @@
 import { resolve, virtual } from '@feathersjs/schema'
 import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
 import { dataValidator, queryValidator } from '#src/validators.js'
-import { parseTool } from '#src/helpers/parseToolboxString.js'
+import { parseTool } from '#src/helpers/toolbox.utils.js'
 
 // Main data model schema
 export const messagesSchema = Type.Object(
