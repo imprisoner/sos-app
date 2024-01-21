@@ -13,7 +13,7 @@ export const messagesSchema = Type.Object(
     roomId: Type.String({ format: 'uuid' }),
     createdAt: Type.String({ format: 'date-time' }),
     content: Type.Optional(Type.String({ minLength: 1 })),
-    imageUrl: Type.Optional(Type.String({format: 'uri'})),
+    imageUrl: Type.Optional(Type.String({ format: 'uri' })),
     tool: Type.Optional(Type.String({ maxLength: 3 }))
   },
   { $id: 'Messages', additionalProperties: false }
@@ -34,7 +34,7 @@ export const messagesResolver = resolve({
     }
   }),
   tool: (value) => {
-    return parseTool(value)
+    return value ? parseTool(value) : null
   }
 })
 

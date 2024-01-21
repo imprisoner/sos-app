@@ -58,7 +58,7 @@ export const SENTENCES = {
 export const QUESTIONS = {
   letter: 'q',
   lastItemId: 8,
-  question: 'question',
+  image: 'question',
   color: 'greenMedium',
   data: questions
 }
