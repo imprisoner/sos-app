@@ -31,9 +31,7 @@ export const toolbox = (app) => {
   app.service(toolboxPath).hooks({
     around: {
       all: [
-        authenticate('jwt'),
-        schemaHooks.resolveExternal(toolboxExternalResolver),
-        schemaHooks.resolveResult(toolboxResolver)
+        authenticate('jwt')
       ]
     },
     before: {
