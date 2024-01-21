@@ -49,15 +49,15 @@ export const ACTIONS = {
 
 export const SENTENCES = {
   letter: 's',
-  lastItemId: 9,
+  lastItemId: 8,
   image: 'sentence',
   color: 'blueDeep',
   data: sentences
 }
 
 export const QUESTIONS = {
-  letter: 'a',
-  lastItemId: 9,
+  letter: 'q',
+  lastItemId: 8,
   question: 'question',
   color: 'greenMedium',
   data: questions
@@ -69,21 +69,21 @@ export const TOOLBOX = [
   {
       id: 1,
       name: 'Actions',
-      img: 'action',
+      image: 'action',
       color: 'purple',
       data: ACTIONS.data
   },
   {
       id: 2,
       name: 'Questions',
-      img: 'question',
+      image: 'question',
       color: 'blueDeep',
       data: QUESTIONS.data
   },
   {
       id: 3,
       name: 'Sentences',
-      img: 'sentences',
+      image: 'sentence',
       color: 'greenMedium',
       data: SENTENCES.data
   },
