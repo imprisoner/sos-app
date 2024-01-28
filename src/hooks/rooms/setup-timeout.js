@@ -1,4 +1,9 @@
+import { app } from '#src/app.js'
+
+
 export const setupTimeout = (context, next) => {
+  const roomsConfig = app.get('rooms')
+
   if(context.data.resultConditionRate >= 0) {
     return context
   }
@@ -10,7 +15,7 @@ export const setupTimeout = (context, next) => {
     new Promise((resolve) => {
       setTimeout(() => {
         resolve(context.service.emit('timeout', data))
-      }, 15000)
+      }, roomsConfig.timeout)
     })
   }
 }

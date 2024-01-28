@@ -59,5 +59,8 @@ module.exports = {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS
     }
+  },
+  rooms: {
+    timeout: process.env.CHAT_SETTINGS_TIMEOUT
   }
 }
