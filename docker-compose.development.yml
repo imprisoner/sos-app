@@ -3,7 +3,7 @@ volumes:
   postgres:
 services:
   postgres:
-    image: postgres:15
+    image: postgres:15-alpine
     container_name: sos_database
     restart: always
     healthcheck:
@@ -37,5 +37,5 @@ services:
       - $APP_LOCAL_PORT:$APP_PORT
     stdin_open: true
     tty: true
-    command: npm run dev
+    command: sh -c "npm run bootstrap && npm run migrate && npm run dev"
     # command: tail -f /dev/null

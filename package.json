@@ -42,7 +42,8 @@
     "bootstrap": "node bootstrap.js",
     "docker:deploy": "docker-compose -H  \"ssh://ubuntu@sos.luden-labs.com\" --env-file .env.production up -d --build",
     "docker:logs": "docker-compose -H \"ssh://ubuntu@sos.luden-labs.com\" logs -f",
-    "docker:inspect": "docker inspect sos_api"
+    "docker:inspect": "docker inspect sos_api",
+    "docker:dev": "docker compose -f docker-compose.development.yml --env-file .env up -d --build"
   },
   "imports": {
     "#src/*": "./src/*",

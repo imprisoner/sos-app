@@ -1,9 +1,8 @@
-FROM node:18.16
+FROM node:18-alpine
 
 ENV NPM_CONFIG_LOGLEVEL info
 
-RUN apt-get update
-RUN apt-get install -y python3
+RUN apk update
 
 RUN mkdir -p /usr/src/app
 
