@@ -27,10 +27,8 @@ export const UserCustomService = {
   }),
 
   deleteAccount: swagger.customMethod('POST', '/delete')(async (_, params) => {
-    const userId = params.user.id
-
     try {
-      return await app.service('users').remove(params.users.id)
+      return app.service('users').remove(params.user.id)
     } catch (e) {
       throw new GeneralError(e)
     }

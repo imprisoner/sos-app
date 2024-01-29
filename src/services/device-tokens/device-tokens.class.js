@@ -9,7 +9,7 @@ export class DeviceTokensService extends KnexService {
       return entity.token === data.token ? entity : this.patch(entity.id, {...data})
     }
 
-    return super.create()
+    return super.create(data, params)
   }
 }
 

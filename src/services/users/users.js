@@ -88,11 +88,11 @@ export const user = (app) => {
   })
 
   app.use(userPath + '/me', UserCustomService, {
-    methods: ['changePassword', 'verifyEmail'],
+    methods: ['changePassword', 'verifyEmail', 'deleteAccount'],
     events: [],
 
     docs: swagger.createSwaggerServiceOptions({
-      securities: ['changePassword', 'verifyEmail'],
+      securities: ['changePassword', 'verifyEmail', 'deleteAccount'],
       schemas: {}
     })
   })
@@ -101,6 +101,7 @@ export const user = (app) => {
     around: {
       verifyEmail: [authenticate('jwt')],
       changePassword: [authenticate('jwt')],
+      deleteAccount: [authenticate('jwt')]
     },
     before: {
       changePassword: [validateNewPassword],
